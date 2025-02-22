@@ -1,10 +1,11 @@
 
 import { useState, useEffect } from "react";
-import { MessageCircle, Mic, Settings } from "lucide-react";
+import { MessageCircle, Mic, Settings, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useConversation } from "@11labs/react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 type Message = {
   id: number;
@@ -27,7 +28,6 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
     },
     onMessage: (message) => {
       if (message.type === "speech_started") {
-        // Add AI message when it starts speaking
         setMessages(prev => [...prev, {
           id: Date.now(),
           text: message.text || "...",
@@ -73,6 +73,10 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
     onComplete();
   };
 
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+  };
+
   return (
     <div className="flex flex-col h-[600px] rounded-xl bg-white/5 backdrop-blur-lg border border-white/10">
       {/* Chat header */}
@@ -87,16 +91,26 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
               <p className="text-sm text-pulse-300">AI-powered assessment</p>
             </div>
           </div>
-          {isConfigured && (
+          <div className="flex items-center gap-2">
+            {isConfigured && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleEndAssessment}
+                className="text-pulse-300 hover:text-pulse-100"
+              >
+                <Settings className="h-5 w-5" />
+              </Button>
+            )}
             <Button
               variant="ghost"
               size="icon"
-              onClick={handleEndAssessment}
+              onClick={handleLogout}
               className="text-pulse-300 hover:text-pulse-100"
             >
-              <Settings className="h-5 w-5" />
+              <LogOut className="h-5 w-5" />
             </Button>
-          )}
+          </div>
         </div>
       </div>
 
