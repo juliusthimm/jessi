@@ -1,12 +1,13 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { MessageCircle, Mic, Settings, LogOut } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useConversation } from "@11labs/react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { CallTranscript } from "./CallTranscript";
+import { ChatHeader } from "./chat/ChatHeader";
+import { ChatControls } from "./chat/ChatControls";
+import { ChatLoading } from "./chat/ChatLoading";
 
 type Message = {
   source: string;
@@ -29,7 +30,7 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]); // Scroll when messages change
+  }, [messages]);
 
   const conversation = useConversation({
     onConnect: () => {
@@ -67,12 +68,10 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
         return;
       } 
       setIsConfigured(true);
-      console.log(apiKeyData.apiKey);
       setApiKeyData(apiKeyData.apiKey);
     }
 
     configureElevenLabs();
-
   }, []);
 
   const startConversation = async () => {
@@ -83,7 +82,7 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
       });
       setConversationId(conversationId);
       setIsConfigured(true);
-      setMessages([]); // Clear messages when starting a new conversation
+      setMessages([]);
     } catch (error) {
       toast({
         title: "Connection Error",
@@ -122,12 +121,11 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
         variant: "destructive",
       });
     }
-  }
+  };
 
   const handleEndAssessment = async () => {
     try {
       await conversation.endSession();
-      console.log(conversationId);
       if (conversationId) {
         navigate(`/analysis/${conversationId}`);
       }
@@ -147,45 +145,14 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
 
   return (
     <div className="flex flex-col h-[600px] rounded-xl bg-white/5 backdrop-blur-lg border border-white/10">
-      <div className="p-4 border-b border-white/10">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full bg-pulse-700 flex items-center justify-center">
-              <MessageCircle className="h-5 w-5 text-pulse-300" />
-            </div>
-            <div>
-              <h3 className="font-semibold">Wellbeing Assistant</h3>
-              <p className="text-sm text-pulse-300">AI-powered assessment</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            {isConfigured && (
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={handleEndAssessment}
-                className="text-pulse-300 hover:text-pulse-100"
-              >
-                <Settings className="h-5 w-5" />
-              </Button>
-            )}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleLogout}
-              className="text-pulse-300 hover:text-pulse-100"
-            >
-              <LogOut className="h-5 w-5" />
-            </Button>
-          </div>
-        </div>
-      </div>
+      <ChatHeader 
+        isConfigured={isConfigured}
+        onEndAssessment={handleEndAssessment}
+        onLogout={handleLogout}
+      />
 
       {!isConfigured ? (
-        <div className="flex-1 flex flex-col items-center justify-center p-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-pulse-300"></div>
-          <p className="text-pulse-300 mt-4">Connecting to ElevenLabs...</p>
-        </div>
+        <ChatLoading />
       ) : (
         <>
           <div className="flex-1 overflow-y-auto">
@@ -193,22 +160,11 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
             <div ref={messagesEndRef} />
           </div>
 
-          <div className="p-4 border-t border-white/10">
-            <div className="flex justify-center items-center gap-4">
-              <Button
-                size="icon"
-                onClick={isCallActive ? handleEndCall : handleStartCall}
-                className={`h-12 w-12 rounded-full ${
-                  isCallActive ? "bg-red-500/20 hover:bg-red-500/30" : ""
-                }`}
-              >
-                <Mic className={`h-6 w-6 ${isCallActive ? "text-red-500" : ""}`} />
-              </Button>
-            </div>
-            <p className="text-sm text-pulse-300 mt-2 text-center">
-              {isCallActive ? "Listening..." : "Click to start call"}
-            </p>
-          </div>
+          <ChatControls 
+            isCallActive={isCallActive}
+            onStartCall={handleStartCall}
+            onEndCall={handleEndCall}
+          />
         </>
       )}
     </div>
