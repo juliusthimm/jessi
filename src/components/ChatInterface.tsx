@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { MessageCircle, Mic, Settings, LogOut } from "lucide-react";
@@ -37,6 +36,23 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
           text: message.text || "...",
           isAi: true
         }]);
+      } else if (message.type === "transcript") {
+        setMessages(prev => [...prev, {
+          id: Date.now(),
+          text: message.text || "",
+          isAi: false
+        }]);
+      } else if (message.type === "speech_text") {
+        setMessages(prev => {
+          const lastMessage = prev[prev.length - 1];
+          if (lastMessage && lastMessage.isAi) {
+            return [
+              ...prev.slice(0, -1),
+              { ...lastMessage, text: message.text || "..." }
+            ];
+          }
+          return prev;
+        });
       }
     },
     onError: (error) => {
@@ -47,7 +63,6 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
       });
     }
   });
-
 
   useEffect(() => {
     const configureElevenLabs = async () => {
@@ -71,17 +86,15 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
 
   }, []);
 
-
-  
   const startConversation = async () => {
     try {
-
       const conversationId = await conversation.startSession({
         apiKey: apiKeyData,
         agentId: "AOtHugEpQt093WLjDkRY",
       });
       setConversationId(conversationId);
       setIsConfigured(true);
+      setMessages([]); // Clear messages when starting a new conversation
     } catch (error) {
       toast({
         title: "Connection Error",
@@ -113,7 +126,6 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
     try {
       await conversation.endSession();
       console.log(conversationId);
-      // Navigate to analysis page with the conversation ID
       if (conversationId) {
         navigate(`/analysis/${conversationId}`);
       }
@@ -133,7 +145,6 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
 
   return (
     <div className="flex flex-col h-[600px] rounded-xl bg-white/5 backdrop-blur-lg border border-white/10">
-      {/* Chat header */}
       <div className="p-4 border-b border-white/10">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -175,10 +186,8 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
         </div>
       ) : (
         <>
-          {/* Chat messages */}
           <CallTranscript messages={messages} />
 
-          {/* Microphone input */}
           <div className="p-4 border-t border-white/10">
             <div className="flex justify-center items-center gap-4">
               <Button
@@ -189,7 +198,7 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
                   isCallActive ? "bg-red-500/20 hover:bg-red-500/30" : ""
                 }`}
               >
-                <Mic className="h-6 w-6" />
+                <Mic className={`h-6 w-6 ${isCallActive ? "text-red-500" : ""}`} />
               </Button>
             </div>
             <p className="text-sm text-pulse-300 mt-2 text-center">
