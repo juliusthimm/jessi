@@ -8,9 +8,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { CallTranscript } from "./CallTranscript";
 
 type Message = {
-  id: number;
-  text: string;
-  isAi: boolean;
+  source: string;
+  message: string;
 };
 
 export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
@@ -30,30 +29,10 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
       });
     },
     onMessage: (message) => {
-      if (message.type === "speech_started") {
-        setMessages(prev => [...prev, {
-          id: Date.now(),
-          text: message.text || "...",
-          isAi: true
-        }]);
-      } else if (message.type === "transcript") {
-        setMessages(prev => [...prev, {
-          id: Date.now(),
-          text: message.text || "",
-          isAi: false
-        }]);
-      } else if (message.type === "speech_text") {
-        setMessages(prev => {
-          const lastMessage = prev[prev.length - 1];
-          if (lastMessage && lastMessage.isAi) {
-            return [
-              ...prev.slice(0, -1),
-              { ...lastMessage, text: message.text || "..." }
-            ];
-          }
-          return prev;
-        });
-      }
+      console.log(message);
+      setMessages(prev => [...prev, {
+        ...message
+      }]);
     },
     onError: (error) => {
       toast({
@@ -121,6 +100,19 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
       });
     }
   };
+
+  const handleEndCall = async () => {
+    try {
+      await conversation.endSession();
+      setIsCallActive(false);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Could not end call",
+        variant: "destructive",
+      });
+    }
+  }
 
   const handleEndAssessment = async () => {
     try {
@@ -191,9 +183,8 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
           <div className="p-4 border-t border-white/10">
             <div className="flex justify-center items-center gap-4">
               <Button
-                variant="outline"
                 size="icon"
-                onClick={isCallActive ? undefined : handleStartCall}
+                onClick={isCallActive ? handleEndCall : handleStartCall}
                 className={`h-12 w-12 rounded-full ${
                   isCallActive ? "bg-red-500/20 hover:bg-red-500/30" : ""
                 }`}
