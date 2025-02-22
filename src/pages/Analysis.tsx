@@ -22,6 +22,7 @@ const Analysis = () => {
 
     const fetchAnalysis = async () => {
       try {
+        if (!loading) return;
         const { data: apiKeyData, error: apiKeyError } = await supabase
           .functions.invoke('get-elevenlabs-key');
 
@@ -78,7 +79,7 @@ const Analysis = () => {
         window.clearInterval(pollInterval);
       }
     };
-  }, [conversationId]);
+  }, [conversationId, loading, toast]);
 
   if (loading) {
     return (
@@ -157,7 +158,7 @@ const Analysis = () => {
           <h2 className="text-xl font-semibold">Topic Analysis</h2>
           <div className="grid gap-4 md:grid-cols-2">
             {Object.entries(WELLBEING_TOPICS).map(([key, topic]) => {
-              const topicData = analysis.analysis?.data_collection_results?.[topic.id];
+              const topicData = analysis.analysis?.data_collection_results?.[topic.title];
               return (
                 <CategoryScore
                   key={topic.id}
