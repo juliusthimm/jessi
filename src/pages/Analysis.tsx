@@ -6,7 +6,7 @@ import { CategoryScore } from "@/components/CategoryScore";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import type { ConversationResponse, ConversationAnalysis } from "@/types/elevenlabs";
+import type { ConversationResponse } from "@/types/elevenlabs";
 
 const POLLING_INTERVAL = 2000; // Poll every 2 seconds
 
@@ -145,6 +145,11 @@ const Analysis = () => {
             <p className="text-pulse-300">
               Messages: {analysis.transcript.length} exchanges
             </p>
+            {analysis.analysis?.transcript_summary && (
+              <p className="text-pulse-300 mt-4">
+                {analysis.analysis.transcript_summary}
+              </p>
+            )}
           </div>
         </div>
 
@@ -152,13 +157,13 @@ const Analysis = () => {
           <h2 className="text-xl font-semibold">Topic Analysis</h2>
           <div className="grid gap-4 md:grid-cols-2">
             {Object.entries(WELLBEING_TOPICS).map(([key, topic]) => {
-              const topicData = analysis.analysis?.[topic.id as keyof ConversationAnalysis];
+              const topicData = analysis.analysis?.data_collection_results?.[topic.id];
               return (
                 <CategoryScore
                   key={topic.id}
                   title={topic.title}
-                  score={topicData?.score || 0}
-                  description={topicData?.insights?.[0] || topic.description}
+                  score={topicData?.value || 0}
+                  description={topicData?.rationale || topic.description}
                 />
               );
             })}
