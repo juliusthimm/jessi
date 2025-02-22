@@ -8,7 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import type { ConversationResponse } from "@/types/elevenlabs";
 
-const POLLING_INTERVAL = 2000; // Poll every 2 seconds
+const POLLING_INTERVAL = 2000;
 
 const Analysis = () => {
   const { conversationId } = useParams();
@@ -135,19 +135,31 @@ const Analysis = () => {
   return (
     <div className="min-h-screen bg-pulse-800 text-pulse-100 p-8">
       <div className="max-w-4xl mx-auto space-y-8">
-        <h1 className="text-3xl font-bold">Wellbeing Analysis</h1>
+        <div className="flex justify-between items-center">
+          <h1 className="text-3xl font-bold">Wellbeing Analysis</h1>
+          <Button
+            onClick={() => navigate('/')}
+            className="bg-pulse-700 hover:bg-pulse-600"
+          >
+            New Assessment
+          </Button>
+        </div>
         
         <div className="p-6 rounded-xl bg-white/5 backdrop-blur-lg border border-white/10">
           <h2 className="text-xl font-semibold mb-4">Conversation Summary</h2>
           <div className="space-y-2">
-            <p className="text-pulse-300">
-              Duration: {analysis.metadata.call_duration_secs} seconds
-            </p>
-            <p className="text-pulse-300">
-              Messages: {analysis.transcript.length} exchanges
-            </p>
+            <div className="flex gap-8">
+              <p className="text-pulse-300">
+                <span className="font-medium text-pulse-100">Duration:</span>{" "}
+                {analysis.metadata.call_duration_secs} seconds
+              </p>
+              <p className="text-pulse-300">
+                <span className="font-medium text-pulse-100">Messages:</span>{" "}
+                {analysis.transcript.length} exchanges
+              </p>
+            </div>
             {analysis.analysis?.transcript_summary && (
-              <p className="text-pulse-300 mt-4">
+              <p className="text-pulse-300 mt-4 leading-relaxed">
                 {analysis.analysis.transcript_summary}
               </p>
             )}
@@ -163,8 +175,9 @@ const Analysis = () => {
                 <CategoryScore
                   key={topic.id}
                   title={topic.title}
-                  score={topicData?.value || 0}
-                  description={topicData?.rationale || topic.description}
+                  score={topicData?.value ?? null}
+                  description={topic.description}
+                  rationale={topicData?.rationale}
                 />
               );
             })}
@@ -188,15 +201,6 @@ const Analysis = () => {
               </div>
             ))}
           </div>
-        </div>
-
-        <div className="flex justify-center">
-          <Button
-            onClick={() => navigate('/')}
-            className="bg-pulse-700 hover:bg-pulse-600"
-          >
-            Start New Assessment
-          </Button>
         </div>
       </div>
     </div>

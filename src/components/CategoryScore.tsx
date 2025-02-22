@@ -1,24 +1,59 @@
 
+import { useState } from "react";
 import { Progress } from "@/components/ui/progress";
+import { ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 type CategoryScoreProps = {
   title: string;
-  score: number;
+  score: number | null;
   description?: string;
+  rationale?: string;
 };
 
-export const CategoryScore = ({ title, score, description }: CategoryScoreProps) => {
+export const CategoryScore = ({ title, score, description, rationale }: CategoryScoreProps) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   return (
     <div className="p-6 rounded-xl bg-white/5 backdrop-blur-lg border border-white/10">
       <h3 className="text-lg font-semibold mb-2">{title}</h3>
       <div className="space-y-4">
-        <Progress value={score*10} className="h-2" />
-        <div className="flex justify-between items-center">
-          <p className="text-2xl font-bold text-pulse-100">{score}</p>
-          {description && (
-            <p className="text-sm text-pulse-300 max-w-[70%]">{description}</p>
+        {score !== null ? (
+          <Progress value={score * 10} className="h-2" />
+        ) : (
+          <div className="h-2 bg-pulse-700/30 rounded-full" />
+        )}
+        <div className="flex justify-between items-start">
+          <div className="flex flex-col gap-1">
+            {score !== null ? (
+              <p className="text-2xl font-bold text-pulse-100">{score}</p>
+            ) : (
+              <p className="text-lg font-medium text-pulse-300">Not Calculated</p>
+            )}
+            {description && (
+              <p className="text-sm text-pulse-300 max-w-[90%]">{description}</p>
+            )}
+          </div>
+          {rationale && (
+            <button
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="text-pulse-300 hover:text-pulse-100 transition-colors"
+            >
+              <ChevronDown
+                className={cn(
+                  "h-5 w-5 transition-transform duration-200",
+                  isExpanded && "rotate-180"
+                )}
+              />
+            </button>
           )}
         </div>
+        {rationale && isExpanded && (
+          <div className="mt-4 p-4 rounded-lg bg-pulse-700/30 text-sm text-pulse-200">
+            <h4 className="font-medium mb-2 text-pulse-100">Analysis Rationale:</h4>
+            <p>{rationale}</p>
+          </div>
+        )}
       </div>
     </div>
   );
