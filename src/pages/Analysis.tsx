@@ -71,7 +71,7 @@ const Analysis = () => {
 
     // Initial fetch
     fetchAnalysis();
-
+    console.log(analysis);
     // Start polling if needed
     pollInterval = window.setInterval(fetchAnalysis, POLLING_INTERVAL);
 
@@ -171,7 +171,6 @@ const Analysis = () => {
             <div className="grid gap-4 md:grid-cols-2">
               {Object.entries(WELLBEING_TOPICS).map(([key, topic]) => {
                 const topicData = analysis.analysis?.data_collection_results?.[topic.id];
-                console.log(topicData);
                 return (
                   <CategoryScore
                     key={topic.id}
@@ -198,7 +197,7 @@ const Analysis = () => {
                   <p className="text-sm text-pulse-300 mb-1">
                     {turn.role === 'user' ? 'You' : 'Assistant'}
                   </p>
-                  <p className="text-pulse-100">{turn.message}</p>
+                  <p className="text-pulse-100">{turn.message || 'Tool call'}</p>
                 </div>
               ))}
             </div>
