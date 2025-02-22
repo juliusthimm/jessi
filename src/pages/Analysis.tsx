@@ -8,6 +8,12 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import type { ConversationResponse } from "@/types/elevenlabs";
 
 const POLLING_INTERVAL = 2000;
@@ -170,7 +176,7 @@ const Analysis = () => {
             <h2 className="text-xl font-semibold">Topic Analysis</h2>
             <div className="grid gap-4 md:grid-cols-2">
               {Object.entries(WELLBEING_TOPICS).map(([key, topic]) => {
-                const topicData = analysis.analysis?.data_collection_results?.[topic.id];
+                const topicData = analysis.analysis?.data_collection_results?.[topic.title];
                 return (
                   <CategoryScore
                     key={topic.id}
@@ -186,21 +192,30 @@ const Analysis = () => {
 
           <div className="p-6 rounded-xl bg-white/5 backdrop-blur-lg border border-white/10">
             <h2 className="text-xl font-semibold mb-4">Conversation Transcript</h2>
-            <div className="space-y-4">
-              {analysis.transcript.map((turn, index) => (
-                <div
-                  key={index}
-                  className={`p-4 rounded-lg ${
-                    turn.role === 'user' ? 'bg-pulse-700/30' : 'bg-pulse-600/30'
-                  }`}
-                >
-                  <p className="text-sm text-pulse-300 mb-1">
-                    {turn.role === 'user' ? 'You' : 'Assistant'}
-                  </p>
-                  <p className="text-pulse-100">{turn.message || 'Tool call'}</p>
-                </div>
-              ))}
-            </div>
+            <Accordion type="single" collapsible className="w-full">
+              <AccordionItem value="transcript" className="border-white/10">
+                <AccordionTrigger className="text-pulse-100 hover:text-pulse-100 hover:no-underline">
+                  View Full Conversation
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="space-y-4 mt-4">
+                    {analysis.transcript.map((turn, index) => (
+                      <div
+                        key={index}
+                        className={`p-4 rounded-lg ${
+                          turn.role === 'user' ? 'bg-pulse-700/30' : 'bg-pulse-600/30'
+                        }`}
+                      >
+                        <p className="text-sm text-pulse-300 mb-1">
+                          {turn.role === 'user' ? 'You' : 'Assistant'}
+                        </p>
+                        <p className="text-pulse-100">{turn.message}</p>
+                      </div>
+                    ))}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </div>
         </div>
       </main>
