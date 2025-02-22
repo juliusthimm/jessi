@@ -17,27 +17,54 @@ const Auth = () => {
   const handleAuth = async (type: "LOGIN" | "SIGNUP") => {
     try {
       setLoading(true);
-      const { error } =
-        type === "LOGIN"
-          ? await supabase.auth.signInWithPassword({ email, password })
-          : await supabase.auth.signUp({ email, password });
 
-      if (error) {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
+      if (type === "LOGIN") {
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
         });
-      } else {
-        toast({
-          title: type === "LOGIN" ? "Welcome back!" : "Account created!",
-          description:
-            type === "LOGIN"
-              ? "You've successfully logged in"
-              : "Please check your email to verify your account",
-        });
-        if (type === "LOGIN") {
+
+        if (error) {
+          toast({
+            title: "Error",
+            description: error.message,
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Welcome back!",
+            description: "You've successfully logged in",
+          });
           navigate("/");
+        }
+      } else {
+        // Handle signup
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: window.location.origin,
+          },
+        });
+
+        if (error) {
+          toast({
+            title: "Error",
+            description: error.message,
+            variant: "destructive",
+          });
+        } else if (data?.user?.identities?.length === 0) {
+          // User already exists
+          toast({
+            title: "Account exists",
+            description: "An account with this email already exists. Please log in instead.",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Check your email",
+            description: "We've sent you a confirmation link to complete your registration",
+          });
         }
       }
     } catch (error) {
