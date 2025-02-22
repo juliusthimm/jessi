@@ -14,7 +14,6 @@ type Message = {
 };
 
 export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
-  const [apiKey, setApiKey] = useState<string>("");
   const [isConfigured, setIsConfigured] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const { toast } = useToast();
@@ -44,29 +43,37 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
     }
   });
 
-  const startAssessment = async () => {
-    if (!apiKey) {
-      toast({
-        title: "API Key Required",
-        description: "Please enter your ElevenLabs API key to continue",
-        variant: "destructive",
-      });
-      return;
-    }
+  useEffect(() => {
+    const startConversation = async () => {
+      try {
+        const { data: apiKeyData, error: apiKeyError } = await supabase
+          .functions.invoke('get-elevenlabs-key');
 
-    try {
-      await conversation.startSession({
-        agentId: "default", // Replace with your actual agent ID from ElevenLabs
-      });
-      setIsConfigured(true);
-    } catch (error) {
-      toast({
-        title: "Connection Error",
-        description: "Failed to connect to ElevenLabs. Please check your API key.",
-        variant: "destructive",
-      });
-    }
-  };
+        if (apiKeyError || !apiKeyData?.apiKey) {
+          toast({
+            title: "Error",
+            description: "Could not retrieve ElevenLabs API key",
+            variant: "destructive",
+          });
+          return;
+        }
+
+        await conversation.startSession({
+          apiKey: apiKeyData.apiKey,
+          agentId: "default", // Replace with your actual agent ID from ElevenLabs
+        });
+        setIsConfigured(true);
+      } catch (error) {
+        toast({
+          title: "Connection Error",
+          description: "Failed to connect to ElevenLabs",
+          variant: "destructive",
+        });
+      }
+    };
+
+    startConversation();
+  }, []);
 
   const handleEndAssessment = async () => {
     await conversation.endSession();
@@ -115,37 +122,9 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
       </div>
 
       {!isConfigured ? (
-        <div className="flex-1 flex flex-col items-center justify-center p-8 space-y-4">
-          <h2 className="text-xl font-semibold text-center">Welcome to Your Wellbeing Assessment</h2>
-          <p className="text-pulse-300 text-center max-w-md">
-            To begin, please enter your ElevenLabs API key. This is required for the voice interaction.
-          </p>
-          <div className="w-full max-w-md space-y-4">
-            <Input
-              type="password"
-              placeholder="Enter your ElevenLabs API key"
-              value={apiKey}
-              onChange={(e) => setApiKey(e.target.value)}
-              className="bg-white/10 border-white/20"
-            />
-            <Button
-              className="w-full bg-pulse-700 hover:bg-pulse-600"
-              onClick={startAssessment}
-            >
-              Start Assessment
-            </Button>
-          </div>
-          <div className="text-sm text-pulse-300 text-center">
-            <p>Don't have an API key?</p>
-            <a
-              href="https://elevenlabs.io/sign-up"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-pulse-100 hover:underline"
-            >
-              Sign up for ElevenLabs
-            </a>
-          </div>
+        <div className="flex-1 flex flex-col items-center justify-center p-8">
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-pulse-300"></div>
+          <p className="text-pulse-300 mt-4">Connecting to ElevenLabs...</p>
         </div>
       ) : (
         <>
