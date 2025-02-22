@@ -13,7 +13,7 @@ export type ConversationTurn = {
   message: string;
   tool_calls: any | null;
   tool_results: any | null;
-  feedback: any | null;
+  feedback: null;
   time_in_call_secs: number;
   conversation_turn_metrics: ConversationTurnMetrics | null;
 };
@@ -42,35 +42,25 @@ export type ConversationMetadata = {
   termination_reason: string;
 };
 
+export type DataCollectionResult = {
+  data_collection_id: string;
+  value: number;
+  json_schema: {
+    type: string;
+    description: string;
+    dynamic_variable: string;
+  };
+  rationale: string;
+};
+
 export type ConversationAnalysis = {
-  leadership?: {
-    score: number;
-    insights: string[];
+  evaluation_criteria_results: Record<string, any>;
+  data_collection_results: {
+    Leadership?: DataCollectionResult;
+    [key: string]: DataCollectionResult | undefined;
   };
-  personal_growth?: {
-    score: number;
-    insights: string[];
-  };
-  feedback?: {
-    score: number;
-    insights: string[];
-  };
-  teamwork?: {
-    score: number;
-    insights: string[];
-  };
-  motivation?: {
-    score: number;
-    insights: string[];
-  };
-  psychological_safety?: {
-    score: number;
-    insights: string[];
-  };
-  company_culture?: {
-    score: number;
-    insights: string[];
-  };
+  call_successful: "success" | string;
+  transcript_summary: string;
 };
 
 export type ConversationResponse = {
@@ -82,8 +72,8 @@ export type ConversationResponse = {
   analysis: ConversationAnalysis | null;
   conversation_initiation_client_data: {
     conversation_config_override: {
-      agent: any | null;
-      tts: any | null;
+      agent: null;
+      tts: null;
     };
     custom_llm_extra_body: Record<string, any>;
     dynamic_variables: Record<string, any>;
