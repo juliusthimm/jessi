@@ -3,6 +3,7 @@ import { useState } from "react";
 import { ChatInterface } from "@/components/ChatInterface";
 import { WellbeingScore } from "@/components/WellbeingScore";
 import { ActionStep } from "@/components/ActionStep";
+import { CategoryScore } from "@/components/CategoryScore";
 import { Button } from "@/components/ui/button";
 import { HeartPulse } from "lucide-react";
 
@@ -11,6 +12,28 @@ const Index = () => {
 
   const mockReport = {
     score: 72,
+    categories: [
+      {
+        title: "Work Conditions",
+        score: 75,
+        description: "Good workplace atmosphere with some room for improvement in workload management.",
+      },
+      {
+        title: "Motivation & Values",
+        score: 82,
+        description: "High alignment between personal values and work, clear goals established.",
+      },
+      {
+        title: "Skills & Knowledge",
+        score: 68,
+        description: "Core skills present but additional training opportunities needed.",
+      },
+      {
+        title: "Health & Ability",
+        score: 70,
+        description: "Generally good psychological resources with some stress management needs.",
+      },
+    ],
     actionSteps: [
       {
         title: "Morning Mindfulness",
@@ -64,6 +87,15 @@ const Index = () => {
             
             <WellbeingScore score={mockReport.score} />
             
+            <div className="space-y-6">
+              <h3 className="text-xl font-semibold">Category Breakdown</h3>
+              <div className="grid gap-4 md:grid-cols-2">
+                {mockReport.categories.map((category, index) => (
+                  <CategoryScore key={index} {...category} />
+                ))}
+              </div>
+            </div>
+
             <div className="space-y-6">
               <h3 className="text-xl font-semibold">Recommended Action Steps</h3>
               <div className="grid gap-4">
