@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { MessageCircle, Mic, Settings, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -20,6 +21,15 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
   const [apiKeyData, setApiKeyData] = useState<string | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]); // Scroll when messages change
 
   const conversation = useConversation({
     onConnect: () => {
@@ -178,7 +188,10 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
         </div>
       ) : (
         <>
-          <CallTranscript messages={messages} />
+          <div className="flex-1 overflow-y-auto">
+            <CallTranscript messages={messages} />
+            <div ref={messagesEndRef} />
+          </div>
 
           <div className="p-4 border-t border-white/10">
             <div className="flex justify-center items-center gap-4">
