@@ -20,6 +20,7 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
   const [isCallActive, setIsCallActive] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [apiKeyData, setApiKeyData] = useState<string | null>(null);
+  const [isCallFinished, setIsCallFinished] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -51,6 +52,13 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
         description: error.message,
         variant: "destructive",
       });
+    },
+    onDisconnect: () => {
+      toast({
+        title: "Disconnected",
+        description: 'Your conversation has ended.',
+      });
+      handleEndCall();
     }
   });
 
@@ -114,6 +122,7 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
     try {
       await conversation.endSession();
       setIsCallActive(false);
+      setIsCallFinished(true);
     } catch (error) {
       toast({
         title: "Error",
@@ -164,6 +173,8 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
             isCallActive={isCallActive}
             onStartCall={handleStartCall}
             onEndCall={handleEndCall}
+            isCallFinished={isCallFinished}
+            handleEndAssessment={handleEndAssessment}
           />
         </>
       )}

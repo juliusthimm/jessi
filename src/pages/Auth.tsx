@@ -113,7 +113,6 @@ const Auth = () => {
                 {loading ? "Processing..." : "Sign In"}
               </Button>
               <Button
-                variant="outline"
                 className="w-full hover:bg-pulse-700"
                 onClick={() => handleAuth("SIGNUP")}
                 disabled={loading}

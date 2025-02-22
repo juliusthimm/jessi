@@ -51,7 +51,7 @@ export const CategoryScore = ({ title, score, description, rationale }: Category
         {rationale && isExpanded && (
           <div className="mt-4 p-4 rounded-lg bg-pulse-700/30 text-sm text-pulse-200">
             <h4 className="font-medium mb-2 text-pulse-100">Analysis Rationale:</h4>
-            <p>{rationale}</p>
+            <p>{score !== null ? rationale : "Not enough data to analyse this datapoint."}</p>
           </div>
         )}
       </div>
