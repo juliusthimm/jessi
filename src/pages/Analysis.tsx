@@ -33,7 +33,7 @@ const Analysis = () => {
         if (apiKeyError || !apiKeyData?.apiKey) {
           throw new Error("Could not retrieve API key");
         }
-
+        console.log(apiKeyData.apiKey);
         const response = await fetch(
           `https://api.elevenlabs.io/v1/convai/conversations/${conversationId}`,
           {
@@ -50,6 +50,7 @@ const Analysis = () => {
 
         const data = await response.json();
         setAnalysis(data);
+        console.log(data);
       } catch (error) {
         toast({
           title: "Error",
