@@ -1,11 +1,12 @@
 
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { MessageCircle, Mic, Settings, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useConversation } from "@11labs/react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { CallTranscript } from "./CallTranscript";
 
 type Message = {
   id: number;
@@ -16,7 +17,9 @@ type Message = {
 export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
   const [isConfigured, setIsConfigured] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [isCallActive, setIsCallActive] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const conversation = useConversation({
     onConnect: () => {
@@ -75,9 +78,38 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
     startConversation();
   }, []);
 
+  const handleStartCall = async () => {
+    try {
+      await navigator.mediaDevices.getUserMedia({ audio: true });
+      setIsCallActive(true);
+      toast({
+        title: "Call Started",
+        description: "You can now speak with the AI assistant",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Could not access microphone",
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleEndAssessment = async () => {
-    await conversation.endSession();
-    onComplete();
+    try {
+      await conversation.endSession();
+      // Navigate to analysis page with the conversation ID
+      if (conversation.conversationId) {
+        navigate(`/analysis/${conversation.conversationId}`);
+      }
+      onComplete();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to end assessment",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleLogout = async () => {
@@ -129,24 +161,7 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
       ) : (
         <>
           {/* Chat messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
-            {messages.map((message) => (
-              <div
-                key={message.id}
-                className={`flex ${message.isAi ? "justify-start" : "justify-end"}`}
-              >
-                <div
-                  className={`max-w-[80%] rounded-xl p-4 ${
-                    message.isAi
-                      ? "bg-pulse-700/50 text-pulse-100"
-                      : "bg-pulse-600 text-pulse-100"
-                  }`}
-                >
-                  <p>{message.text}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <CallTranscript messages={messages} />
 
           {/* Microphone input */}
           <div className="p-4 border-t border-white/10">
@@ -154,15 +169,16 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
               <Button
                 variant="outline"
                 size="icon"
+                onClick={isCallActive ? undefined : handleStartCall}
                 className={`h-12 w-12 rounded-full ${
-                  conversation.isSpeaking ? "bg-red-500/20 hover:bg-red-500/30" : ""
+                  isCallActive ? "bg-red-500/20 hover:bg-red-500/30" : ""
                 }`}
               >
                 <Mic className="h-6 w-6" />
               </Button>
             </div>
             <p className="text-sm text-pulse-300 mt-2 text-center">
-              {conversation.isSpeaking ? "Listening..." : "Click to speak"}
+              {isCallActive ? "Listening..." : "Click to start call"}
             </p>
           </div>
         </>
