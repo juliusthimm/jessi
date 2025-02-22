@@ -19,7 +19,7 @@ export const CategoryScore = ({ title, score, description, rationale }: Category
       <h3 className="text-lg font-semibold mb-2">{title}</h3>
       <div className="space-y-4">
         {score !== null ? (
-          <Progress value={score * 10} className="h-2" />
+          <Progress value={score} className="h-2" />
         ) : (
           <div className="h-2 bg-pulse-700/30 rounded-full" />
         )}

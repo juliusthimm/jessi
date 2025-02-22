@@ -6,7 +6,7 @@ export const WELLBEING_TOPICS = {
     description: 'Evaluation of leadership skills, communication effectiveness, and ability to guide and inspire others.'
   },
   PERSONAL_GROWTH: {
-    id: 'personal_growth',
+    id: 'personal-growth',
     title: 'Personal Growth',
     description: 'Assessment of self-development, learning opportunities, and career progression aspirations.'
   },
@@ -26,12 +26,12 @@ export const WELLBEING_TOPICS = {
     description: 'Assessment of drive, engagement levels, and factors affecting work enthusiasm.'
   },
   PSYCHOLOGICAL_SAFETY: {
-    id: 'psychological_safety',
+    id: 'psychological-safety',
     title: 'Psychological Safety',
     description: 'Analysis of workplace comfort, ability to express opinions, and feeling of security.'
   },
   COMPANY_CULTURE: {
-    id: 'company_culture',
+    id: 'company-culture',
     title: 'Company Culture & Practices',
     description: 'Evaluation of organizational values alignment, workplace practices, and cultural fit.'
   }
