@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { HeartPulse } from "lucide-react";
+import { Footer } from "@/components/Footer";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
@@ -38,7 +39,6 @@ const Auth = () => {
           navigate("/");
         }
       } else {
-        // Handle signup
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
@@ -54,7 +54,6 @@ const Auth = () => {
             variant: "destructive",
           });
         } else if (data?.user?.identities?.length === 0) {
-          // User already exists
           toast({
             title: "Account exists",
             description: "An account with this email already exists. Please log in instead.",
@@ -79,50 +78,53 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-pulse-800 text-pulse-100 flex items-center justify-center">
-      <div className="w-full max-w-md space-y-8 p-8">
-        <div className="text-center space-y-6">
-          <div className="inline-flex items-center justify-center p-3 rounded-full bg-pulse-700/50">
-            <HeartPulse className="h-8 w-8 text-pulse-300" />
+    <div className="min-h-screen bg-pulse-800 text-pulse-100 flex flex-col">
+      <div className="flex-1 flex items-center justify-center p-8">
+        <div className="w-full max-w-md space-y-8">
+          <div className="text-center space-y-6">
+            <div className="inline-flex items-center justify-center p-3 rounded-full bg-pulse-700/50">
+              <HeartPulse className="h-8 w-8 text-pulse-300" />
+            </div>
+            <h1 className="text-3xl font-bold">Welcome to Pulse</h1>
+            <p className="text-pulse-300">Sign in or create an account to continue</p>
           </div>
-          <h1 className="text-3xl font-bold">Welcome to Pulse</h1>
-          <p className="text-pulse-300">Sign in or create an account to continue</p>
-        </div>
 
-        <div className="space-y-4">
-          <Input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="bg-white/10 border-white/20"
-          />
-          <Input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="bg-white/10 border-white/20"
-          />
-          <div className="space-y-2">
-            <Button
-              className="w-full bg-pulse-700 hover:bg-pulse-600"
-              onClick={() => handleAuth("LOGIN")}
-              disabled={loading}
-            >
-              {loading ? "Processing..." : "Sign In"}
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full hover:bg-pulse-700"
-              onClick={() => handleAuth("SIGNUP")}
-              disabled={loading}
-            >
-              Create Account
-            </Button>
+          <div className="space-y-4">
+            <Input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="bg-white/10 border-white/20"
+            />
+            <Input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="bg-white/10 border-white/20"
+            />
+            <div className="space-y-2">
+              <Button
+                className="w-full bg-pulse-700 hover:bg-pulse-600"
+                onClick={() => handleAuth("LOGIN")}
+                disabled={loading}
+              >
+                {loading ? "Processing..." : "Sign In"}
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full hover:bg-pulse-700"
+                onClick={() => handleAuth("SIGNUP")}
+                disabled={loading}
+              >
+                Create Account
+              </Button>
+            </div>
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
