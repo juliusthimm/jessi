@@ -41,7 +41,6 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
       });
     },
     onMessage: (message) => {
-      console.log(message);
       setMessages(prev => [...prev, {
         ...message
       }]);

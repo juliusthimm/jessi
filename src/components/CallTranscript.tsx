@@ -7,7 +7,6 @@ type Message = {
 };
 
 export const CallTranscript = ({ messages }: { messages: Message[] }) => {
-  console.log(messages);
   return (
     <ScrollArea className="flex-1 p-4">
       <div className="space-y-4">

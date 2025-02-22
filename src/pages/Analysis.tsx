@@ -77,7 +77,6 @@ const Analysis = () => {
 
     // Initial fetch
     fetchAnalysis();
-    console.log(analysis);
     // Start polling if needed
     pollInterval = window.setInterval(fetchAnalysis, POLLING_INTERVAL);
 
@@ -176,7 +175,7 @@ const Analysis = () => {
             <h2 className="text-xl font-semibold">Topic Analysis</h2>
             <div className="grid gap-4 md:grid-cols-2">
               {Object.entries(WELLBEING_TOPICS).map(([key, topic]) => {
-                const topicData = analysis.analysis?.data_collection_results?.[topic.title];
+                const topicData = analysis.analysis?.data_collection_results?.[topic.id];
                 return (
                   <CategoryScore
                     key={topic.id}

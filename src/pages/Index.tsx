@@ -62,7 +62,7 @@ const Index = () => {
               Wellbeing Pulse Check
             </h1>
             <p className="text-lg text-pulse-300 max-w-2xl mx-auto">
-              Have a conversation with our AI assistant to assess your mental wellbeing
+              Have a conversation with our AI agent to assess your mental wellbeing
               and receive personalized recommendations.
             </p>
             <Button

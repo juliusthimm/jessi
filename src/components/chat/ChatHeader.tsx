@@ -22,7 +22,7 @@ export const ChatHeader = ({ isConfigured, onEndAssessment, onLogout }: ChatHead
           </div>
         </div>
         <div className="flex items-center gap-2">
-          {isConfigured && (
+          {/* {isConfigured && (
             <Button
               variant="ghost"
               size="icon"
@@ -31,7 +31,7 @@ export const ChatHeader = ({ isConfigured, onEndAssessment, onLogout }: ChatHead
             >
               <Settings className="h-5 w-5" />
             </Button>
-          )}
+          )} */}
           <Button
             variant="ghost"
             size="icon"
