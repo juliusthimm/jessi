@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { HeartPulse, LogOut, Building2 } from "lucide-react";
+import { HeartPulse, LogOut, Building2, User } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Header = () => {
@@ -24,6 +24,10 @@ export const Header = () => {
     navigate('/company');
   };
 
+  const handleProfile = () => {
+    navigate('/profile');
+  };
+
   return (
     <header className="bg-pulse-800 border-b border-white/10">
       <div className="container max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
@@ -44,6 +48,12 @@ export const Header = () => {
           >
             <Building2 className="h-5 w-5 mr-2" />
             Company
+          </Button>
+          <Button
+            onClick={handleProfile}
+            className="bg-pulse-700 hover:bg-pulse-600 text-white"
+          >
+            <User className="h-5 w-5" />
           </Button>
           <Button
             size="icon"
