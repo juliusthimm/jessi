@@ -22,7 +22,7 @@ export const DashboardStats = ({
 }: DashboardStatsProps) => {
   return (
     <div className="space-y-6">
-      {!showAssessment && userRole === 'admin' && (
+      {!showAssessment && (userRole === 'admin' || userRole === 'hr') && (
         <StatsCard
           icon={BarChart2}
           title="Company Assessments"
