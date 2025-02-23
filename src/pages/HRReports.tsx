@@ -21,7 +21,9 @@ interface AnalysisRecord {
   user_id: string;
   analysis: ConversationResponse['analysis'];
   created_at: string;
-  username: string | null;
+  user_profile: {
+    username: string | null;
+  } | null;
 }
 
 const HRReports = () => {
@@ -49,7 +51,7 @@ const HRReports = () => {
             user_id,
             analysis,
             created_at,
-            username:profiles!conversation_analyses_user_id_fkey(username)
+            user_profile:user_id(username)
           `)
           .eq('company_id', userCompany.company_id)
           .eq('status', 'done')
@@ -64,7 +66,7 @@ const HRReports = () => {
           user_id: record.user_id,
           analysis: record.analysis as ConversationResponse['analysis'],
           created_at: record.created_at,
-          username: record.username?.username ?? null
+          user_profile: record.user_profile as { username: string | null } | null
         }));
         
         setAnalyses(typedData);
@@ -154,7 +156,7 @@ const HRReports = () => {
             {analyses.map((record) => (
               <Card key={record.id}>
                 <CardHeader>
-                  <CardTitle>{record.username || 'Anonymous User'}</CardTitle>
+                  <CardTitle>{record.user_profile?.username || 'Anonymous User'}</CardTitle>
                   <CardDescription>
                     {new Date(record.created_at).toLocaleDateString()}
                   </CardDescription>
