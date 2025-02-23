@@ -52,8 +52,10 @@ const Index = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-pulse-300"></div>
+      <div className="min-h-screen bg-pulse-800 text-pulse-100 flex flex-col">
+        <div className="flex-1 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-pulse-300"></div>
+        </div>
       </div>
     );
   }
@@ -69,7 +71,7 @@ const Index = () => {
                 <div className="inline-flex items-center justify-center p-3 rounded-full bg-pulse-700/50">
                   <HeartPulse className="h-8 w-8 text-pulse-300" />
                 </div>
-                <h1 className="text-3xl font-bold">How are you doing today?</h1>
+                <h1 className="text-3xl font-bold text-pulse-100">How are you doing today?</h1>
                 <p className="text-lg text-pulse-300">Take a quick assessment to check your wellbeing</p>
                 <Button 
                   size="lg" 
@@ -92,7 +94,7 @@ const Index = () => {
                   <BarChart2 className="h-6 w-6 text-pulse-300" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-semibold">Total Assessments</h2>
+                  <h2 className="text-xl font-semibold text-pulse-100">Total Assessments</h2>
                   <p className="text-3xl font-bold text-pulse-300">{totalChats}</p>
                 </div>
               </div>
@@ -103,13 +105,13 @@ const Index = () => {
           {userRole === 'hr' && (
             <Card className="p-6 bg-white/5 backdrop-blur-lg border-white/10">
               <div className="space-y-4">
-                <h2 className="text-xl font-semibold">HR Tools</h2>
+                <h2 className="text-xl font-semibold text-pulse-100">HR Tools</h2>
                 <div className="flex gap-4">
                   <Button 
-                    className="bg-pulse-700 hover:bg-pulse-600"
+                    className="bg-pulse-700 hover:bg-pulse-600 text-white"
                     onClick={() => navigate('/hr-reports')}
                   >
-                    <FileText className="mr-2" />
+                    <FileText className="h-4 w-4 mr-2" />
                     View Team Reports
                   </Button>
                 </div>
@@ -122,7 +124,7 @@ const Index = () => {
         <div className="space-y-6">
           <Card className="p-6 bg-white/5 backdrop-blur-lg border-white/10">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-semibold">Recent History</h2>
+              <h2 className="text-xl font-semibold text-pulse-100">Recent History</h2>
               <History className="h-5 w-5 text-pulse-300" />
             </div>
             <AnalysisHistory />
@@ -135,7 +137,7 @@ const Index = () => {
   };
 
   return (
-    <div className="container max-w-7xl mx-auto px-4 py-8">
+    <div className="max-w-7xl mx-auto px-4 py-8">
       {renderDashboard()}
     </div>
   );
