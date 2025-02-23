@@ -112,11 +112,9 @@ const Analysis = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-pulse-800 text-pulse-100 flex flex-col">
-        <Header />
         <div className="flex-1 flex items-center justify-center">
           <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-pulse-300"></div>
         </div>
-        <Footer />
       </div>
     );
   }
@@ -124,13 +122,11 @@ const Analysis = () => {
   if (!analysis) {
     return (
       <div className="min-h-screen bg-pulse-800 text-pulse-100 flex flex-col">
-        <Header />
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <p className="text-pulse-300">No analysis data available</p>
           </div>
         </div>
-        <Footer />
       </div>
     );
   }
@@ -138,14 +134,12 @@ const Analysis = () => {
   if (analysis.status === 'processing') {
     return (
       <div className="min-h-screen bg-pulse-800 text-pulse-100 flex flex-col">
-        <Header />
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center space-y-4">
             <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-pulse-300 mx-auto"></div>
             <p className="text-pulse-300">Analyzing conversation...</p>
           </div>
         </div>
-        <Footer />
       </div>
     );
   }
@@ -153,20 +147,17 @@ const Analysis = () => {
   if (analysis.status === 'error') {
     return (
       <div className="min-h-screen bg-pulse-800 text-pulse-100 flex flex-col">
-        <Header />
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <p className="text-red-400">An error occurred while analyzing the conversation</p>
           </div>
         </div>
-        <Footer />
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-pulse-800 text-pulse-100 flex flex-col">
-      <Header />
       <main className="flex-1 p-8">
         <div className="max-w-4xl mx-auto space-y-8">
           <h1 className="text-3xl font-bold">Wellbeing Analysis</h1>
@@ -239,7 +230,6 @@ const Analysis = () => {
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   );
 };

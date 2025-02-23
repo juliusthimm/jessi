@@ -141,8 +141,7 @@ const CompanyOnboarding = () => {
   };
 
   return (
-    <div className="min-h-screen bg-pulse-800 text-pulse-100 flex flex-col">
-      <Header />
+    <div className="min-h-screen bg-pulse-800 text-pulse-100 flex flex-col">      
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full max-w-md space-y-8">
           <div className="text-center space-y-6">
@@ -234,7 +233,6 @@ const CompanyOnboarding = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };
