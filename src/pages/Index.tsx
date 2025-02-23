@@ -44,7 +44,7 @@ const Index = () => {
           Employee pulse surveys suck.
         </h1>
         <div className="space-y-4 text-xl md:text-2xl max-w-2xl mx-auto">
-          <p className="text-pulse-300 font-normal text-left">Meet the new standard for modern employee wellbeing.</p>
+          <p className="text-pulse-300 font-normal text-left">Self-submission surveys to measure employee wellbeing is like trying to capture the full story of a book in one sentence.</p>
           
           
         </div>
