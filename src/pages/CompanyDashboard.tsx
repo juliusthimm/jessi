@@ -27,6 +27,7 @@ const CompanyDashboard = () => {
   const [company, setCompany] = useState<Company | null>(null);
   const [loading, setLoading] = useState(true);
   const [inviteEmail, setInviteEmail] = useState("");
+  const [inviting, setInviting] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -102,30 +103,52 @@ const CompanyDashboard = () => {
 
   const handleInvite = async () => {
     try {
+      setInviting(true);
       if (!company) return;
 
-      const { error } = await supabase
+      // Generate invite token
+      const inviteToken = crypto.randomUUID();
+      
+      // Create invite record in database
+      const { error: inviteError } = await supabase
         .from('company_invites')
         .insert([{
           company_id: company.id,
           email: inviteEmail,
-          token: crypto.randomUUID(),
+          token: inviteToken,
           expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days
         }]);
 
-      if (error) throw error;
+      if (inviteError) throw inviteError;
+
+      // Generate invite link
+      const inviteLink = `${window.location.origin}/auth?invite=${inviteToken}`;
+
+      // Send invite email
+      const { error: emailError } = await supabase.functions.invoke('send-invite-email', {
+        body: {
+          email: inviteEmail,
+          companyName: company.name,
+          inviteLink,
+        },
+      });
+
+      if (emailError) throw emailError;
 
       toast({
         title: "Invite sent",
         description: `Invitation sent to ${inviteEmail}`,
       });
       setInviteEmail("");
-    } catch (error) {
+    } catch (error: any) {
+      console.error("Invite error:", error);
       toast({
         title: "Error",
         description: "Failed to send invite",
         variant: "destructive",
       });
+    } finally {
+      setInviting(false);
     }
   };
 
@@ -208,11 +231,11 @@ const CompanyDashboard = () => {
                 />
                 <Button
                   onClick={handleInvite}
-                  disabled={!inviteEmail}
+                  disabled={inviting || !inviteEmail}
                   className="bg-pulse-600 hover:bg-pulse-500"
                 >
                   <Mail className="h-4 w-4 mr-2" />
-                  Send Invite
+                  {inviting ? "Sending..." : "Send Invite"}
                 </Button>
               </div>
             </div>
