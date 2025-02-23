@@ -67,7 +67,7 @@ export const LoginForm = ({ onToggleAuthState }: LoginFormProps) => {
       />
       <div className="space-y-2">
         <Button
-          className="w-full bg-pulse-700 hover:bg-pulse-600"
+          className="w-full bg-pulse-600 hover:bg-pulse-500"
           onClick={handleLogin}
           disabled={loading}
         >

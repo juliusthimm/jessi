@@ -25,13 +25,12 @@ export const SignupForm = ({ onToggleAuthState }: SignupFormProps) => {
     try {
       setLoading(true);
       
-      // First, create the user account
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
         password,
         options: {
           data: {
-            username, // Add username to user metadata
+            username,
           },
         },
       });
@@ -54,7 +53,6 @@ export const SignupForm = ({ onToggleAuthState }: SignupFormProps) => {
         return;
       }
 
-      // Update the profile with additional information
       if (authData.user) {
         const { error: profileError } = await supabase
           .from('profiles')
@@ -136,7 +134,7 @@ export const SignupForm = ({ onToggleAuthState }: SignupFormProps) => {
             type="button"
             variant={mode === 'personal' ? 'default' : 'outline'}
             onClick={() => setMode('personal')}
-            className={mode === 'personal' ? 'bg-pulse-700 hover:bg-pulse-600' : ''}
+            className={mode === 'personal' ? 'bg-pulse-600 hover:bg-pulse-500' : ''}
           >
             Personal
           </Button>
@@ -144,7 +142,7 @@ export const SignupForm = ({ onToggleAuthState }: SignupFormProps) => {
             type="button"
             variant={mode === 'company' ? 'default' : 'outline'}
             onClick={() => setMode('company')}
-            className={mode === 'company' ? 'bg-pulse-700 hover:bg-pulse-600' : ''}
+            className={mode === 'company' ? 'bg-pulse-600 hover:bg-pulse-500' : ''}
           >
             Company
           </Button>
@@ -153,7 +151,7 @@ export const SignupForm = ({ onToggleAuthState }: SignupFormProps) => {
 
       <div className="space-y-2 pt-4">
         <Button
-          className="w-full bg-pulse-700 hover:bg-pulse-600"
+          className="w-full bg-pulse-600 hover:bg-pulse-500"
           onClick={handleSignup}
           disabled={loading || !email || !password || !username}
         >

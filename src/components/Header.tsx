@@ -31,14 +31,14 @@ export const Header = () => {
           <Button
             variant="ghost"
             onClick={handleNewAssessment}
-            className="text-pulse-300 hover:text-pulse-100"
+            className="text-pulse-300 hover:bg-pulse-700"
           >
             New Assessment
           </Button>
           <Button
             variant="ghost"
             onClick={handleCompanyDashboard}
-            className="text-pulse-300 hover:text-pulse-100"
+            className="text-pulse-300 hover:bg-pulse-700"
           >
             <Building2 className="h-5 w-5 mr-2" />
             Company
@@ -47,7 +47,7 @@ export const Header = () => {
             variant="ghost"
             size="icon"
             onClick={handleLogout}
-            className="text-pulse-300 hover:text-pulse-100"
+            className="text-pulse-300 hover:bg-pulse-700"
           >
             <LogOut className="h-5 w-5" />
           </Button>
