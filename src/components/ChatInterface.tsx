@@ -42,10 +42,12 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
     },
     onMessage: (message) => {
       setMessages(prev => [...prev, {
-        ...message
+        source: message.source,
+        message: message.message
       }]);
     },
     onError: (error) => {
+      console.error("Conversation error:", error);
       toast({
         title: "Error",
         description: error.message,
@@ -57,32 +59,47 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
         title: "Disconnected",
         description: 'Your conversation has ended.',
       });
-      handleEndCall();
+      setIsCallActive(false);
+      setIsCallFinished(true);
     }
   });
 
   useEffect(() => {
     const configureElevenLabs = async () => {
-      const { data: apiKeyData, error: apiKeyError } = await supabase
-        .functions.invoke('get-elevenlabs-key');
-  
-      if (apiKeyError || !apiKeyData?.apiKey) {
+      try {
+        const { data: apiKeyData, error: apiKeyError } = await supabase
+          .functions.invoke('get-elevenlabs-key');
+    
+        if (apiKeyError || !apiKeyData?.apiKey) {
+          console.error("ElevenLabs API key error:", apiKeyError);
+          toast({
+            title: "Error",
+            description: "Could not retrieve ElevenLabs API key",
+            variant: "destructive",
+          });
+          return;
+        } 
+        setIsConfigured(true);
+        setApiKeyData(apiKeyData.apiKey);
+      } catch (error) {
+        console.error("Configuration error:", error);
         toast({
           title: "Error",
-          description: "Could not retrieve ElevenLabs API key",
+          description: "Failed to configure chat",
           variant: "destructive",
         });
-        return;
-      } 
-      setIsConfigured(true);
-      setApiKeyData(apiKeyData.apiKey);
+      }
     }
 
     configureElevenLabs();
-  }, []);
+  }, [toast]);
 
   const startConversation = async () => {
     try {
+      if (!apiKeyData) {
+        throw new Error("ElevenLabs API key not available");
+      }
+
       const conversationId = await conversation.startSession({
         apiKey: apiKeyData,
         agentId: "AOtHugEpQt093WLjDkRY",
@@ -91,29 +108,33 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
       setIsConfigured(true);
       setMessages([]);
     } catch (error) {
+      console.error("Start conversation error:", error);
       toast({
         title: "Connection Error",
         description: "Failed to connect to ElevenLabs",
         variant: "destructive",
       });
+      setIsCallActive(false);
     }
   };
 
   const handleStartCall = async () => {
     try {
-      await startConversation();
       await navigator.mediaDevices.getUserMedia({ audio: true });
+      await startConversation();
       setIsCallActive(true);
       toast({
         title: "Call Started",
         description: "You can now speak with the AI assistant",
       });
     } catch (error) {
+      console.error("Start call error:", error);
       toast({
         title: "Error",
-        description: "Could not access microphone",
+        description: error instanceof Error ? error.message : "Could not access microphone",
         variant: "destructive",
       });
+      setIsCallActive(false);
     }
   };
 
@@ -123,6 +144,7 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
       setIsCallActive(false);
       setIsCallFinished(true);
     } catch (error) {
+      console.error("End call error:", error);
       toast({
         title: "Error",
         description: "Could not end call",
@@ -139,6 +161,7 @@ export const ChatInterface = ({ onComplete }: { onComplete: () => void }) => {
       }
       onComplete();
     } catch (error) {
+      console.error("End assessment error:", error);
       toast({
         title: "Error",
         description: "Failed to end assessment",
