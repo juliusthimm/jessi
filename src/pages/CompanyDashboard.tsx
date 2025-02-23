@@ -133,7 +133,7 @@ const CompanyDashboard = () => {
           </h1>
           <p className="text-pulse-300 mt-2">Company Management Dashboard</p>
         </div>
-        {(company.currentUserRole === 'hr' || company.currentUserRole === 'admin') && (
+        {(company.currentUserRole === 'hr') && (
           <Button 
             onClick={() => navigate('/hr-reports')}
             className="flex items-center gap-2"
