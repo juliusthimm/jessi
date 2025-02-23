@@ -190,7 +190,7 @@ const Home = () => {
                   <p className="text-3xl font-bold text-pulse-300">{personalChats}</p>
                   {lastAssessmentDate && (
                     <p className="text-sm text-pulse-400">
-                      Last assessment {lastAssessmentDate}
+                      Last updated {lastAssessmentDate}
                     </p>
                   )}
                 </div>
