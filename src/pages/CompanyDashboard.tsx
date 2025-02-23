@@ -56,11 +56,8 @@ const CompanyDashboard = () => {
         .single();
 
       if (companyError || !companyData?.company) {
-        toast({
-          title: "Error",
-          description: "Failed to fetch company data",
-          variant: "destructive",
-        });
+        // Silently redirect to company-onboarding instead of showing error toast
+        navigate('/company-onboarding');
         return;
       }
 
@@ -113,14 +110,7 @@ const CompanyDashboard = () => {
   }
 
   if (!company) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">No Company Found</h1>
-          <Button onClick={() => navigate('/')}>Return Home</Button>
-        </div>
-      </div>
-    );
+    return null; // Don't show any error UI, as we'll redirect in fetchCompanyData
   }
 
   return (
