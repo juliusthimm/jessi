@@ -2,10 +2,9 @@
 import { useState } from "react";
 import { HeartPulse } from "lucide-react";
 import { Footer } from "@/components/Footer";
-import { AuthState } from "@/types/auth";
 import { LoginForm } from "@/components/auth/LoginForm";
 import { SignupForm } from "@/components/auth/SignupForm";
-import { CompanyCreationForm } from "@/components/auth/CompanyCreationForm";
+import { AuthState } from "@/types/auth";
 
 const Auth = () => {
   const [authState, setAuthState] = useState<AuthState>("LOGIN");
@@ -23,27 +22,14 @@ const Auth = () => {
               <HeartPulse className="h-8 w-8 text-pulse-300" />
             </div>
             <h1 className="text-3xl font-bold">Welcome to Pulse</h1>
-            {authState === 'CREATE_COMPANY' ? (
-              <p className="text-pulse-300">Create your company profile</p>
-            ) : (
-              <p className="text-pulse-300">Sign in or create an account to continue</p>
-            )}
+            <p className="text-pulse-300">Sign in or create an account to continue</p>
           </div>
 
           <div className="space-y-4">
-            {authState === 'LOGIN' && (
+            {authState === 'LOGIN' ? (
               <LoginForm onToggleAuthState={toggleAuthState} />
-            )}
-            {authState === 'SIGNUP' && (
-              <SignupForm
-                onToggleAuthState={toggleAuthState}
-                onCompanyCreation={() => setAuthState('CREATE_COMPANY')}
-              />
-            )}
-            {authState === 'CREATE_COMPANY' && (
-              <CompanyCreationForm
-                onBack={() => setAuthState('SIGNUP')}
-              />
+            ) : (
+              <SignupForm onToggleAuthState={toggleAuthState} />
             )}
           </div>
         </div>
