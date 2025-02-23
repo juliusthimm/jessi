@@ -61,7 +61,7 @@ const Home = () => {
           {!showAssessment ? <Card className="p-6 bg-white/5 backdrop-blur-lg border-white/10">
               <div className="text-center space-y-6">
                 <div className="inline-flex items-center justify-center p-3 rounded-full bg-pulse-700/50 px-[5px] py-[5px]">
-                  <img alt="Pulsato Logo" src="/lovable-uploads/759af5a0-30c2-4e87-9faa-2aee05cdba88.png" className="h-12 w-12" />
+                  <img alt="Pulsato Logo" src="/lovable-uploads/759af5a0-30c2-4e87-9faa-2aee05cdba88.png" className="h-14 w-14" />
                 </div>
                 <h1 className="text-3xl font-bold text-pulse-100">
                   How are you doing today?
