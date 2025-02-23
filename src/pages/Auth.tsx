@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { HeartPulse } from "lucide-react";
 import { Footer } from "@/components/Footer";
 import { LoginForm } from "@/components/auth/LoginForm";
