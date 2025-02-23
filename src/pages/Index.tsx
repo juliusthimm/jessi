@@ -46,7 +46,7 @@ const Index = () => {
         <div className="space-y-4 text-xl md:text-2xl max-w-2xl mx-auto">
           <p className="text-pulse-300 font-normal text-left">Meet the new standard for modern employee wellbeing.</p>
           
-          <p className="font-semibold text-pulse-100 mt-32 text-left">You miss the story & emotions.</p>
+          
         </div>
         <div className="pt-8 text-left">
           <Button size="lg" className="bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 transition-all duration-300 text-white gap-2 text-lg border-0 shadow-lg shadow-purple-500/25" onClick={handleSignup}>
