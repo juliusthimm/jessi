@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChatInterface } from "@/components/ChatInterface";
@@ -16,6 +17,7 @@ const Home = () => {
   const [totalChats, setTotalChats] = useState(0);
   const [personalChats, setPersonalChats] = useState(0);
   const [lastAssessmentDate, setLastAssessmentDate] = useState<string | null>(null);
+  const [lastCompanyAssessmentDate, setLastCompanyAssessmentDate] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -67,13 +69,37 @@ const Home = () => {
           }
         }
 
-        // If admin, fetch total company chats
+        // If admin, fetch total company chats and last company assessment
         if (member?.role === 'admin' && member?.company_id) {
           const { count } = await supabase
             .from('conversation_analyses')
             .select('*', { count: 'exact', head: true })
             .eq('company_id', member.company_id);
           setTotalChats(count || 0);
+
+          // Fetch last company assessment date
+          const { data: lastCompanyAssessment } = await supabase
+            .from('conversation_analyses')
+            .select('created_at')
+            .eq('company_id', member.company_id)
+            .eq('status', 'done')
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .single();
+
+          if (lastCompanyAssessment) {
+            const date = new Date(lastCompanyAssessment.created_at);
+            const daysDifference = differenceInDays(new Date(), date);
+            if (daysDifference <= 7) {
+              const distance = formatDistance(date, new Date(), { 
+                includeSeconds: false,
+                addSuffix: true
+              });
+              setLastCompanyAssessmentDate(distance);
+            } else {
+              setLastCompanyAssessmentDate(format(date, 'MMMM do, yyyy'));
+            }
+          }
         }
       } catch (error) {
         console.error('Error fetching user role:', error);
@@ -170,11 +196,16 @@ const Home = () => {
                 <div className="p-3 rounded-full bg-pulse-700/50">
                   <BarChart2 className="h-6 w-6 text-pulse-300" />
                 </div>
-                <div>
+                <div className="space-y-1">
                   <h2 className="text-xl font-semibold text-pulse-100">
                     Company Assessments
                   </h2>
                   <p className="text-3xl font-bold text-pulse-300">{totalChats}</p>
+                  {lastCompanyAssessmentDate && (
+                    <p className="text-sm text-pulse-400">
+                      Last updated {lastCompanyAssessmentDate}
+                    </p>
+                  )}
                 </div>
               </div>
             </Card>
