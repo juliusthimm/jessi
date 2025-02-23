@@ -7,13 +7,17 @@ import { WellbeingScore } from "@/components/WellbeingScore";
 import { CategoryScore } from "@/components/CategoryScore";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Calendar } from "@/components/ui/calendar";
+import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useNavigate } from "react-router-dom";
+import { format } from "date-fns";
+import { Calendar as CalendarIcon, X } from "lucide-react";
 import type { ConversationResponse } from "@/types/elevenlabs";
 
 interface AnalysisRecord {
@@ -30,6 +34,7 @@ interface AnalysisRecord {
 const HRReports = () => {
   const [analyses, setAnalyses] = useState<AnalysisRecord[]>([]);
   const [loading, setLoading] = useState(true);
+  const [dateFilter, setDateFilter] = useState<Date | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -129,10 +134,17 @@ const HRReports = () => {
   const calculateAverageScores = () => {
     if (!analyses.length) return {};
     
+    const filteredAnalyses = dateFilter 
+      ? analyses.filter(record => {
+          const recordDate = new Date(record.created_at);
+          return recordDate.toDateString() === dateFilter.toDateString();
+        })
+      : analyses;
+    
     const totals: Record<string, number> = {};
     const counts: Record<string, number> = {};
 
-    analyses.forEach(record => {
+    filteredAnalyses.forEach(record => {
       if (record.analysis?.data_collection_results) {
         Object.entries(record.analysis.data_collection_results).forEach(([key, data]) => {
           if (data?.value !== undefined && data.value !== null) {
@@ -151,6 +163,13 @@ const HRReports = () => {
 
   const averageScores = calculateAverageScores();
 
+  const filteredAnalyses = dateFilter
+    ? analyses.filter(record => {
+        const recordDate = new Date(record.created_at);
+        return recordDate.toDateString() === dateFilter.toDateString();
+      })
+    : analyses;
+
   if (loading) {
     return (
       <div className="min-h-screen bg-pulse-800 text-pulse-100 flex flex-col">
@@ -165,7 +184,41 @@ const HRReports = () => {
     <div className="min-h-screen bg-pulse-800 text-pulse-100 flex flex-col">
       <main className="flex-1 p-8">
         <div className="max-w-4xl mx-auto space-y-8">
-          <h1 className="text-3xl font-bold">Team Wellbeing Reports</h1>
+          <div className="flex justify-between items-center">
+            <h1 className="text-3xl font-bold">Team Wellbeing Reports</h1>
+            <div className="flex gap-2">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="bg-pulse-700/50 border-white/10 text-pulse-100 hover:bg-pulse-600"
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {dateFilter ? format(dateFilter, "PPP") : "Filter by date"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0 bg-pulse-700 border-white/10">
+                  <Calendar
+                    mode="single"
+                    selected={dateFilter || undefined}
+                    onSelect={setDateFilter}
+                    initialFocus
+                    className="bg-pulse-700 text-pulse-100"
+                  />
+                </PopoverContent>
+              </Popover>
+              {dateFilter && (
+                <Button
+                  variant="outline"
+                  className="bg-pulse-700/50 border-white/10 text-pulse-100 hover:bg-pulse-600"
+                  onClick={() => setDateFilter(null)}
+                >
+                  <X className="h-4 w-4" />
+                  Clear
+                </Button>
+              )}
+            </div>
+          </div>
 
           <Tabs defaultValue="overview" className="space-y-6">
             <TabsList className="bg-pulse-700/50 border border-white/10">
@@ -185,7 +238,9 @@ const HRReports = () => {
 
             <TabsContent value="overview">
               <div className="p-6 rounded-xl bg-white/5 backdrop-blur-lg border border-white/10">
-                <h2 className="text-xl font-semibold mb-4">Team Overview</h2>
+                <h2 className="text-xl font-semibold mb-4">
+                  Team Overview {dateFilter && `for ${format(dateFilter, "PPP")}`}
+                </h2>
                 <div className="grid gap-4 md:grid-cols-2">
                   {Object.entries(WELLBEING_TOPICS).map(([key, topic]) => {
                     const score = averageScores[topic.id];
@@ -203,37 +258,42 @@ const HRReports = () => {
             </TabsContent>
 
             <TabsContent value="individual">
-              <div className="space-y-6">
-                {analyses.map((record) => (
-                  <div 
-                    key={record.id} 
-                    className="p-6 rounded-xl bg-white/5 backdrop-blur-lg border border-white/10"
+              <Accordion type="single" collapsible className="space-y-4">
+                {filteredAnalyses.map((record) => (
+                  <AccordionItem
+                    key={record.id}
+                    value={record.id}
+                    className="p-4 rounded-xl bg-white/5 backdrop-blur-lg border border-white/10"
                   >
-                    <div className="mb-6">
-                      <h3 className="text-xl font-semibold text-pulse-100">
-                        Anonymous User
-                      </h3>
-                      <p className="text-pulse-300">
-                        {new Date(record.created_at).toUTCString()}
-                      </p>
-                    </div>
-                    <div className="grid gap-4 md:grid-cols-2">
-                      {Object.entries(WELLBEING_TOPICS).map(([key, topic]) => {
-                        const topicData = record.analysis?.data_collection_results?.[topic.id];
-                        return (
-                          <CategoryScore
-                            key={`${record.id}-${topic.id}`}
-                            title={topic.title}
-                            score={topicData?.value ?? null}
-                            description={topic.description}
-                            rationale={topicData?.rationale}
-                          />
-                        );
-                      })}
-                    </div>
-                  </div>
+                    <AccordionTrigger className="hover:no-underline">
+                      <div className="flex flex-col items-start">
+                        <h3 className="text-lg font-semibold text-pulse-100">
+                          {record.user_profile?.username || 'Anonymous User'}
+                        </h3>
+                        <p className="text-sm text-pulse-300">
+                          {format(new Date(record.created_at), "PPP")}
+                        </p>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div className="grid gap-4 md:grid-cols-2 pt-4">
+                        {Object.entries(WELLBEING_TOPICS).map(([key, topic]) => {
+                          const topicData = record.analysis?.data_collection_results?.[topic.id];
+                          return (
+                            <CategoryScore
+                              key={`${record.id}-${topic.id}`}
+                              title={topic.title}
+                              score={topicData?.value ?? null}
+                              description={topic.description}
+                              rationale={topicData?.rationale}
+                            />
+                          );
+                        })}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
                 ))}
-              </div>
+              </Accordion>
             </TabsContent>
           </Tabs>
         </div>
