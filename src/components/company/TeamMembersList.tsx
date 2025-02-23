@@ -52,6 +52,17 @@ export const TeamMembersList = ({ members, currentUserRole }: TeamMembersListPro
       return;
     }
 
+    // Don't allow changing your own role
+    const member = members.find(m => m.id === memberId);
+    if (member?.user_id === currentUserId) {
+      toast({
+        title: "Unauthorized",
+        description: "You cannot change your own role",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setUpdatingMemberId(memberId);
     try {
       const { error } = await supabase
@@ -116,7 +127,7 @@ export const TeamMembersList = ({ members, currentUserRole }: TeamMembersListPro
                   <p className="text-sm text-pulse-300">{member.role}</p>
                 </div>
               </div>
-              {member.role !== 'admin' && currentUserRole === 'admin' && (
+              {!isCurrentUser && currentUserRole === 'admin' && (
                 <Select
                   defaultValue={member.role}
                   onValueChange={(value: CompanyRole) => handleRoleChange(member.id, value)}
@@ -129,6 +140,12 @@ export const TeamMembersList = ({ members, currentUserRole }: TeamMembersListPro
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-pulse-700 border-white/10">
+                    <SelectItem 
+                      value="admin" 
+                      className="text-pulse-100 focus:bg-pulse-600 focus:text-pulse-100"
+                    >
+                      Admin
+                    </SelectItem>
                     <SelectItem 
                       value="hr" 
                       className="text-pulse-100 focus:bg-pulse-600 focus:text-pulse-100"
