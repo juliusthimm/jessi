@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
@@ -101,10 +102,9 @@ const Index = () => {
               {Object.values(WELLBEING_TOPICS).map((topic, index) => (
                 <Card 
                   key={topic.id} 
-                  className="p-6 glass-card bg-gradient-to-br from-white/10 to-white/5 
-                    hover:from-white/20 hover:to-white/10
+                  className="p-6 glass-card bg-white/5
+                    hover:bg-white/20
                     transition-all duration-500 ease-in-out
-                    hover:scale-105 hover:shadow-xl hover:shadow-purple-500/20
                     cursor-pointer group
                     min-w-[200px]
                     min-h-[200px]"
