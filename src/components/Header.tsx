@@ -73,7 +73,7 @@ export const Header = () => {
         <div className="flex items-center gap-4">
           <Button onClick={handleCompanyDashboard} className="bg-pulse-700 hover:bg-pulse-600 text-white">
             <Building2 className="h-5 w-5 mr-2" />
-            {companyName || 'Create team'}
+            {companyName || 'Company'}
           </Button>
           <Button onClick={handleProfile} className="bg-pulse-700 hover:bg-pulse-600 text-white">
             <User className="h-5 w-5 mr-2" />
