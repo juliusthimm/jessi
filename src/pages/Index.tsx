@@ -5,17 +5,20 @@ import { WELLBEING_TOPICS } from "@/constants/wellbeing-topics";
 import { ArrowRight } from "lucide-react";
 import WebFont from 'webfontloader';
 import { useEffect } from "react";
+
 const Index = () => {
   useEffect(() => {
     WebFont.load({
       google: {
-        families: ['Instrument Serif']
+        families: ['Roboto Condensed']
       }
     });
   }, []);
+  
   const navigate = useNavigate();
   const handleLogin = () => navigate("/auth");
   const handleSignup = () => navigate("/auth?tab=signup");
+  
   return <div className="min-h-screen bg-pulse-800 text-pulse-100">
     {/* Header */}
     <header className="fixed top-0 w-full z-50 bg-gradient-to-b from-pulse-800 via-pulse-800/95 to-pulse-800/80 backdrop-blur-xl border-b border-white/5">
@@ -38,7 +41,9 @@ const Index = () => {
     {/* Hero Section */}
     <section className="min-h-screen pt-32 flex-column items-center justify-center px-4 relative overflow-hidden">
       <div className="container max-w-2xl mx-auto space-y-8 text-center relative animate-fade-in my-0 py-[90px]">
-        <h1 className="text-5xl bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text leading-tight max-w-4xl mx-auto text-left md:text-[AA8BFF] font-normal text-slate-50">
+        <h1 style={{
+          fontFamily: 'Roboto Condensed'
+        }} className="text-5xl text-[#AA8BFF] leading-tight max-w-4xl mx-auto text-left font-normal">
           Employee pulse surveys suck.
         </h1>
         <div className="space-y-4 text-xl md:text-2xl max-w-2xl mx-auto">
@@ -199,4 +204,5 @@ const Index = () => {
     </footer>
   </div>;
 };
+
 export default Index;
