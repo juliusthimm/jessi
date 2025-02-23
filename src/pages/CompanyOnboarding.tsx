@@ -117,8 +117,8 @@ const CompanyOnboarding = () => {
         <div className="w-full max-w-md space-y-8">
           <div className="text-center space-y-6">
             
-            <h1 className="text-3xl font-bold">Company Setup</h1>
-            <p className="text-pulse-300">Create or join a company (optional)</p>
+            
+            <p className="text-pulse-300">Create or join a company</p>
           </div>
 
           <div className="space-y-4">
