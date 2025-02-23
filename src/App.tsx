@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "@/pages/Index";
 import Auth from "@/pages/Auth";
 import Analysis from "@/pages/Analysis";
+import CompanyDashboard from "@/pages/CompanyDashboard";
 import NotFound from "@/pages/NotFound";
 import { Toaster } from "@/components/ui/toaster";
 import { useEffect, useState } from "react";
@@ -35,6 +36,10 @@ function App() {
         <Route
           path="/analysis/:conversationId"
           element={isAuthenticated ? <Analysis /> : <Navigate to="/auth" />}
+        />
+        <Route
+          path="/company"
+          element={isAuthenticated ? <CompanyDashboard /> : <Navigate to="/auth" />}
         />
         <Route path="*" element={<NotFound />} />
       </Routes>
