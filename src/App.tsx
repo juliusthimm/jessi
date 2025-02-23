@@ -31,7 +31,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* Public routes */}
-        <Route path="/" element={!isAuthenticated ? <Index /> : <Navigate to="/home" />} />
+        <Route path="/" element={<Index />} />
         <Route
           path="/auth"
           element={!isAuthenticated ? <Auth /> : <Navigate to="/home" />}
