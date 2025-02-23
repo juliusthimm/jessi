@@ -211,10 +211,10 @@ const HRReports = () => {
                   >
                     <div className="mb-6">
                       <h3 className="text-xl font-semibold text-pulse-100">
-                        {record.user_profile?.username || 'Anonymous User'}
+                        Anonymous User
                       </h3>
                       <p className="text-pulse-300">
-                        {new Date(record.created_at).toLocaleDateString()}
+                        {new Date(record.created_at).toUTCString()}
                       </p>
                     </div>
                     <div className="grid gap-4 md:grid-cols-2">
