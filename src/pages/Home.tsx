@@ -62,8 +62,8 @@ const Home = () => {
 
   const renderDashboard = () => {
     const commonElements = (
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 space-y-6">
+      <div className="flex flex-col gap-6">
+        <div className="w-full">
           {!showAssessment ? (
             <Card className="p-6 bg-white/5 backdrop-blur-lg border-white/10">
               <div className="text-center space-y-6">
@@ -88,9 +88,30 @@ const Home = () => {
           ) : (
             <ChatInterface onComplete={() => setShowAssessment(false)} />
           )}
+        </div>
 
-          {/* Recent History - Moved here */}
-          {!showAssessment && (
+        {/* Total Assessments - Admin Stats */}
+        {!showAssessment && userRole === 'admin' && (
+          <div className="w-full">
+            <Card className="p-6 bg-white/5 backdrop-blur-lg border-white/10">
+              <div className="flex items-center gap-4">
+                <div className="p-3 rounded-full bg-pulse-700/50">
+                  <BarChart2 className="h-6 w-6 text-pulse-300" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-semibold text-pulse-100">
+                    Total Assessments
+                  </h2>
+                  <p className="text-3xl font-bold text-pulse-300">{totalChats}</p>
+                </div>
+              </div>
+            </Card>
+          </div>
+        )}
+
+        {/* Recent History */}
+        {!showAssessment && (
+          <div className="w-full">
             <Card className="p-6 bg-white/5 backdrop-blur-lg border-white/10">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-semibold text-pulse-100">
@@ -99,10 +120,12 @@ const Home = () => {
               </div>
               <AnalysisHistory />
             </Card>
-          )}
+          </div>
+        )}
 
-          {/* HR Actions */}
-          {userRole === 'hr' && (
+        {/* HR Actions */}
+        {userRole === 'hr' && (
+          <div className="w-full">
             <Card className="p-6 bg-white/5 backdrop-blur-lg border-white/10">
               <div className="space-y-4">
                 <h2 className="text-xl font-semibold text-pulse-100">HR Tools</h2>
@@ -114,25 +137,6 @@ const Home = () => {
                     <FileText className="h-4 w-4 mr-2" />
                     View Team Reports
                   </Button>
-                </div>
-              </div>
-            </Card>
-          )}
-        </div>
-
-        {/* Sidebar - Admin Stats moved here */}
-        {!showAssessment && userRole === 'admin' && (
-          <div className="space-y-6">
-            <Card className="p-6 bg-white/5 backdrop-blur-lg border-white/10">
-              <div className="flex items-center gap-4">
-                <div className="p-3 rounded-full bg-pulse-700/50">
-                  <BarChart2 className="h-6 w-6 text-pulse-300" />
-                </div>
-                <div>
-                  <h2 className="text-xl font-semibold text-pulse-100">
-                    Total Assessments
-                  </h2>
-                  <p className="text-3xl font-bold text-pulse-300">{totalChats}</p>
                 </div>
               </div>
             </Card>
