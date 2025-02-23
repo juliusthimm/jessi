@@ -43,7 +43,7 @@ const HRReports = () => {
           throw new Error('No company found');
         }
 
-        const { data, error } = await supabase
+        const { data: analysesData, error } = await supabase
           .from('conversation_analyses')
           .select(`
             id,
@@ -51,7 +51,7 @@ const HRReports = () => {
             user_id,
             analysis,
             created_at,
-            profiles!conversation_analyses_user_id_fkey (
+            profiles (
               username
             )
           `)
@@ -61,11 +61,15 @@ const HRReports = () => {
 
         if (error) throw error;
         
-        // Type assertion to handle the JSON to ConversationResponse['analysis'] conversion
-        const typedData = data?.map(record => ({
-          ...record,
-          analysis: record.analysis as ConversationResponse['analysis']
-        })) || [];
+        // Transform the data to match the AnalysisRecord type
+        const typedData: AnalysisRecord[] = (analysesData || []).map(record => ({
+          id: record.id,
+          conversation_id: record.conversation_id,
+          user_id: record.user_id,
+          analysis: record.analysis as ConversationResponse['analysis'],
+          created_at: record.created_at,
+          profiles: record.profiles as { username: string | null } | null
+        }));
         
         setAnalyses(typedData);
       } catch (error) {
