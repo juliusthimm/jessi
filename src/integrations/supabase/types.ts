@@ -107,6 +107,53 @@ export type Database = {
           },
         ]
       }
+      conversation_analyses: {
+        Row: {
+          analysis: Json | null
+          company_id: string | null
+          conversation_id: string
+          created_at: string
+          id: string
+          metadata: Json | null
+          status: Database["public"]["Enums"]["conversation_status"]
+          transcript: Json | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          analysis?: Json | null
+          company_id?: string | null
+          conversation_id: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          status?: Database["public"]["Enums"]["conversation_status"]
+          transcript?: Json | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          analysis?: Json | null
+          company_id?: string | null
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          status?: Database["public"]["Enums"]["conversation_status"]
+          transcript?: Json | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversation_analyses_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -156,6 +203,7 @@ export type Database = {
     }
     Enums: {
       company_role: "employee" | "hr" | "admin"
+      conversation_status: "processing" | "done" | "error"
       user_mode: "personal" | "company"
     }
     CompositeTypes: {

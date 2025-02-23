@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { WELLBEING_TOPICS } from "@/constants/wellbeing-topics";
@@ -54,6 +53,28 @@ const Analysis = () => {
 
         const data: ConversationResponse = await response.json();
         setAnalysis(data);
+
+        // Store the analysis in the database
+        if (data.status === 'done') {
+          const { data: userData } = await supabase.auth.getUser();
+          if (userData.user) {
+            const { data: profileData } = await supabase
+              .from('profiles')
+              .select('company_id')
+              .eq('id', userData.user.id)
+              .single();
+
+            await supabase.from('conversation_analyses').insert({
+              conversation_id: conversationId,
+              user_id: userData.user.id,
+              company_id: profileData?.company_id,
+              status: data.status,
+              transcript: data.transcript,
+              metadata: data.metadata,
+              analysis: data.analysis,
+            });
+          }
+        }
 
         // If status is 'done' or 'error', stop polling
         if (data.status !== 'processing') {

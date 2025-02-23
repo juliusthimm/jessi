@@ -5,6 +5,7 @@ import Auth from "@/pages/Auth";
 import Analysis from "@/pages/Analysis";
 import CompanyDashboard from "@/pages/CompanyDashboard";
 import CompanyOnboarding from "@/pages/CompanyOnboarding";
+import HRReports from "@/pages/HRReports";
 import NotFound from "@/pages/NotFound";
 import { Toaster } from "@/components/ui/toaster";
 import { useEffect, useState } from "react";
@@ -39,6 +40,7 @@ function App() {
           <Route path="/analysis/:conversationId" element={<Analysis />} />
           <Route path="/company" element={<CompanyDashboard />} />
           <Route path="/company-onboarding" element={<CompanyOnboarding />} />
+          <Route path="/hr-reports" element={<HRReports />} />
         </Route>
 
         {/* 404 page with MainLayout */}
