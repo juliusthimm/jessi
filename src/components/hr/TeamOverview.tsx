@@ -1,16 +1,29 @@
 
 import { CategoryScore } from "@/components/CategoryScore";
 import { WELLBEING_TOPICS } from "@/constants/wellbeing-topics";
+import { ConversationResponse } from "@/types/elevenlabs";
 import { format } from "date-fns";
+
+interface AnalysisRecord {
+  id: string;
+  conversation_id: string;
+  user_id: string;
+  analysis: ConversationResponse['analysis'];
+  created_at: string;
+  user_profile: {
+    username: string | null;
+  } | null;
+}
 
 interface TeamOverviewProps {
   averageScores: Record<string, number | null>;
   dateRange: { start: Date; end: Date } | null;
+  analyses: AnalysisRecord[];
 }
 
-export const TeamOverview = ({ averageScores, dateRange }: TeamOverviewProps) => {
+export const TeamOverview = ({ averageScores, dateRange, analyses }: TeamOverviewProps) => {
   // Count unique user IDs who contributed to any score
-  const uniqueContributors = Object.values(averageScores).filter(score => score !== null).length;
+  const uniqueContributors = Object.values(analyses).length;
 
   return (
     <div className="p-6 rounded-xl bg-white/5 backdrop-blur-lg border border-white/10">

@@ -184,7 +184,7 @@ const HRReports = () => {
             </TabsList>
 
             <TabsContent value="overview">
-              <TeamOverview averageScores={averageScores} dateRange={dateRange} />
+              <TeamOverview analyses={analyses} averageScores={averageScores} dateRange={dateRange} />
             </TabsContent>
 
             <TabsContent value="individual">
