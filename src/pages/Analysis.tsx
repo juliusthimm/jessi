@@ -99,7 +99,7 @@ const Analysis = () => {
       }
 
       // Check if the call was successful
-      const callSuccessful = analysis.metadata?.call_successful === "success";
+      const callSuccessful = analysis.analysis?.call_successful === "success";
       if (!callSuccessful) {
         toast({
           title: "Cannot Send Report",
