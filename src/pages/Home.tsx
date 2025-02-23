@@ -142,7 +142,7 @@ const Home = () => {
             </div>
           )}
 
-          {userRole === 'admin' && <AdminTools />}
+          {(userRole === 'hr' || userRole === 'admin') && <AdminTools />}
         </div>
 
         <DashboardStats
