@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { CompanyRole } from "@/types/auth";
 import { AnalysisHistory } from "@/components/AnalysisHistory";
 import { Card } from "@/components/ui/card";
-import { formatDistance, format, differenceInDays } from "date-fns";
+import { formatDistanceStrict, format, differenceInDays } from "date-fns";
 import { WelcomeCard } from "@/components/home/WelcomeCard";
 import { AdminTools } from "@/components/home/AdminTools";
 import { DashboardStats } from "@/components/home/DashboardStats";
@@ -60,8 +60,7 @@ const Home = () => {
           const date = new Date(lastAssessment.created_at);
           const daysDifference = differenceInDays(new Date(), date);
           if (daysDifference <= 7) {
-            const distance = formatDistance(date, new Date(), { 
-              includeSeconds: false,
+            const distance = formatDistanceStrict(date, new Date(), { 
               addSuffix: true
             });
             setLastAssessmentDate(distance);
@@ -92,8 +91,7 @@ const Home = () => {
             const date = new Date(lastCompanyAssessment.created_at);
             const daysDifference = differenceInDays(new Date(), date);
             if (daysDifference <= 7) {
-              const distance = formatDistance(date, new Date(), { 
-                includeSeconds: false,
+              const distance = formatDistanceStrict(date, new Date(), { 
                 addSuffix: true
               });
               setLastCompanyAssessmentDate(distance);
