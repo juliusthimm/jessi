@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Shield, UserCheck, Users } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -88,7 +89,7 @@ export const TeamMembersList = ({ members, currentUserRole }: TeamMembersListPro
   });
 
   return (
-    <div className="bg-white/5 backdrop-blur-lg border-white/10 rounded-lg p-6">
+    <div className="glass-card p-6">
       <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
         <Users className="h-5 w-5" />
         Team Members
@@ -99,7 +100,7 @@ export const TeamMembersList = ({ members, currentUserRole }: TeamMembersListPro
           return (
             <div
               key={member.id}
-              className={`flex items-center justify-between p-3 rounded transition-colors ${
+              className={`flex items-center justify-between p-3 rounded-lg transition-colors ${
                 isCurrentUser 
                   ? "bg-pulse-500/50 border border-pulse-400/50" 
                   : "bg-pulse-600/50"
