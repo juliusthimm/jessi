@@ -94,7 +94,6 @@ export const AnalysisHistory = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-semibold">Your Analysis History</h2>
         <DateFilter dateRange={dateRange} setDateRange={setDateRange} />
       </div>
       <IndividualReports analyses={analyses} />

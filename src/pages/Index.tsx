@@ -125,7 +125,6 @@ const Index = () => {
           <Card className="p-6 bg-white/5 backdrop-blur-lg border-white/10">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-semibold text-pulse-100">Recent History</h2>
-              <History className="h-5 w-5 text-pulse-300" />
             </div>
             <AnalysisHistory />
           </Card>
