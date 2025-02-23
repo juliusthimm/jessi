@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Shield, Users } from "lucide-react";
+import { Shield, UserCheck, Users } from "lucide-react";
 import { useState } from "react";
 import { CompanyRole } from "@/types/auth";
 import {
@@ -70,6 +70,19 @@ export const TeamMembersList = ({ members, currentUserRole }: TeamMembersListPro
     }
   };
 
+  // Get current user data
+  const getCurrentUser = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    return user?.id;
+  };
+
+  // Sort members to put current user first
+  const sortedMembers = [...members].sort((a, b) => {
+    if (a.user_id === getCurrentUser()) return -1;
+    if (b.user_id === getCurrentUser()) return 1;
+    return 0;
+  });
+
   return (
     <div className="bg-pulse-700/50 rounded-lg p-6">
       <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
@@ -77,45 +90,58 @@ export const TeamMembersList = ({ members, currentUserRole }: TeamMembersListPro
         Team Members
       </h2>
       <div className="space-y-4">
-        {members.map((member) => (
-          <div
-            key={member.id}
-            className="flex items-center justify-between p-3 bg-pulse-600/50 rounded"
-          >
-            <div>
-              <p className="font-medium">{member.profiles?.username || 'Anonymous User'}</p>
-              <p className="text-sm text-pulse-300">{member.role}</p>
-            </div>
-            {member.role !== 'admin' && currentUserRole === 'admin' && (
-              <Select
-                defaultValue={member.role}
-                onValueChange={(value: CompanyRole) => handleRoleChange(member.id, value)}
-                disabled={updatingMemberId === member.id}
-              >
-                <SelectTrigger 
-                  className="w-[140px] bg-pulse-700/50 border-white/10 text-pulse-100 hover:bg-pulse-600"
+        {sortedMembers.map((member) => {
+          const isCurrentUser = member.user_id === getCurrentUser();
+          return (
+            <div
+              key={member.id}
+              className={`flex items-center justify-between p-3 rounded transition-colors ${
+                isCurrentUser 
+                  ? "bg-pulse-500/50 border border-pulse-400/50" 
+                  : "bg-pulse-600/50"
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                {isCurrentUser && <UserCheck className="h-4 w-4 text-pulse-300" />}
+                <div>
+                  <p className="font-medium">
+                    {member.profiles?.username || 'Anonymous User'}
+                    {isCurrentUser && " (You)"}
+                  </p>
+                  <p className="text-sm text-pulse-300">{member.role}</p>
+                </div>
+              </div>
+              {member.role !== 'admin' && currentUserRole === 'admin' && (
+                <Select
+                  defaultValue={member.role}
+                  onValueChange={(value: CompanyRole) => handleRoleChange(member.id, value)}
+                  disabled={updatingMemberId === member.id}
                 >
-                  <Shield className="h-4 w-4 mr-2" />
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="bg-pulse-700 border-white/10">
-                  <SelectItem 
-                    value="hr" 
-                    className="text-pulse-100 focus:bg-pulse-600 focus:text-pulse-100"
+                  <SelectTrigger 
+                    className="w-[140px] bg-pulse-700/50 border-white/10 text-pulse-100 hover:bg-pulse-600"
                   >
-                    HR
-                  </SelectItem>
-                  <SelectItem 
-                    value="employee"
-                    className="text-pulse-100 focus:bg-pulse-600 focus:text-pulse-100"
-                  >
-                    Employee
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            )}
-          </div>
-        ))}
+                    <Shield className="h-4 w-4 mr-2" />
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-pulse-700 border-white/10">
+                    <SelectItem 
+                      value="hr" 
+                      className="text-pulse-100 focus:bg-pulse-600 focus:text-pulse-100"
+                    >
+                      HR
+                    </SelectItem>
+                    <SelectItem 
+                      value="employee"
+                      className="text-pulse-100 focus:bg-pulse-600 focus:text-pulse-100"
+                    >
+                      Employee
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
