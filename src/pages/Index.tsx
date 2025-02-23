@@ -38,9 +38,9 @@ const Index = () => {
     {/* Hero Section */}
     <section className="min-h-screen pt-32 flex-column items-center justify-center px-4 relative overflow-hidden">
       <div className="container max-w-2xl mx-auto space-y-8 text-center relative animate-fade-in my-0 py-[90px]">
-        <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text leading-tight max-w-4xl mx-auto md:text-5xl text-left" style={{
+        <h1 style={{
           fontFamily: 'Instrument Serif'
-        }}>
+        }} className="text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text leading-tight max-w-4xl mx-auto text-left md:text-[AA8BFF]">
           Employee pulse surveys suck.
         </h1>
         <div className="space-y-4 text-xl md:text-2xl max-w-2xl mx-auto">
