@@ -95,11 +95,11 @@ export const UserProfileForm = () => {
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="username">Username</Label>
+        <Label htmlFor="username">First Name</Label>
         <Input
           id="username"
           type="text"
-          placeholder="Choose a username"
+          placeholder="Enter your first name"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           className="bg-white/10 border-white/20"
