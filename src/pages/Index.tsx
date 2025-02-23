@@ -135,7 +135,6 @@ const Index = () => {
 
     {/* Video Section */}
     <section className="py-32 px-4 bg-gradient-to-b from-pulse-700/20 to-transparent relative overflow-hidden">
-      <div className="absolute inset-0 bg-[url('/lovable-uploads/a5e9f09a-e485-46be-818d-ed43ce51f6e3.png')] opacity-5 bg-cover bg-center mix-blend-overlay" />
       <div className="container max-w-2xl mx-auto space-y-8 text-center relative">
         <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text text-left" style={{
           fontFamily: 'Instrument Serif'
@@ -163,6 +162,7 @@ const Index = () => {
         <div className="flex flex-col sm:flex-row justify-left gap-12">
           <div className="text-center group">
               <div className="w-40 h-40 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 mx-auto mb-6 backdrop-blur-xl border border-white/10 transition-transform group-hover:scale-105 relative overflow-hidden">
+                <img src="/lovable-uploads/julius.jpg" alt="Julius T." className="absolute inset-0 w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-pulse-800/50" />
               </div>
               <p className="text-lg text-pulse-100 font-medium">Julius T.</p>
