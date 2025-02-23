@@ -3,8 +3,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { UserMode } from "@/types/auth";
 
 interface SignupFormProps {
   onToggleAuthState: () => void;
@@ -13,6 +15,8 @@ interface SignupFormProps {
 export const SignupForm = ({ onToggleAuthState }: SignupFormProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [mode, setMode] = useState<UserMode>("personal");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -20,30 +24,62 @@ export const SignupForm = ({ onToggleAuthState }: SignupFormProps) => {
   const handleSignup = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase.auth.signUp({
+      
+      // First, create the user account
+      const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: {
+            username, // Add username to user metadata
+          },
+        },
       });
 
-      if (error) {
+      if (authError) {
         toast({
           title: "Error",
-          description: error.message,
+          description: authError.message,
           variant: "destructive",
         });
-      } else if (data?.user?.identities?.length === 0) {
+        return;
+      }
+
+      if (authData?.user?.identities?.length === 0) {
         toast({
           title: "Account exists",
           description: "An account with this email already exists. Please log in instead.",
           variant: "destructive",
         });
-      } else {
-        toast({
-          title: "Check your email",
-          description: "We've sent you a confirmation link to complete your registration",
-        });
-        navigate('/company-onboarding');
+        return;
       }
+
+      // Update the profile with additional information
+      if (authData.user) {
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .update({
+            username,
+            mode,
+          })
+          .eq('id', authData.user.id);
+
+        if (profileError) {
+          toast({
+            title: "Error",
+            description: "Failed to update profile information",
+            variant: "destructive",
+          });
+          return;
+        }
+      }
+
+      toast({
+        title: "Check your email",
+        description: "We've sent you a confirmation link to complete your registration",
+      });
+      navigate('/company-onboarding');
+      
     } catch (error) {
       toast({
         title: "Error",
@@ -56,26 +92,70 @@ export const SignupForm = ({ onToggleAuthState }: SignupFormProps) => {
   };
 
   return (
-    <>
-      <Input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className="bg-white/10 border-white/20"
-      />
-      <Input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        className="bg-white/10 border-white/20"
-      />
+    <div className="space-y-4">
       <div className="space-y-2">
+        <Label htmlFor="email">Email</Label>
+        <Input
+          id="email"
+          type="email"
+          placeholder="your@email.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="bg-white/10 border-white/20"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="username">Username</Label>
+        <Input
+          id="username"
+          type="text"
+          placeholder="Choose a username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          className="bg-white/10 border-white/20"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="password">Password</Label>
+        <Input
+          id="password"
+          type="password"
+          placeholder="••••••••"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="bg-white/10 border-white/20"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="mode">Account Type</Label>
+        <div className="flex gap-4">
+          <Button
+            type="button"
+            variant={mode === 'personal' ? 'default' : 'outline'}
+            onClick={() => setMode('personal')}
+            className={mode === 'personal' ? 'bg-pulse-700 hover:bg-pulse-600' : ''}
+          >
+            Personal
+          </Button>
+          <Button
+            type="button"
+            variant={mode === 'company' ? 'default' : 'outline'}
+            onClick={() => setMode('company')}
+            className={mode === 'company' ? 'bg-pulse-700 hover:bg-pulse-600' : ''}
+          >
+            Company
+          </Button>
+        </div>
+      </div>
+
+      <div className="space-y-2 pt-4">
         <Button
           className="w-full bg-pulse-700 hover:bg-pulse-600"
           onClick={handleSignup}
-          disabled={loading}
+          disabled={loading || !email || !password || !username}
         >
           {loading ? "Processing..." : "Create Account"}
         </Button>
@@ -88,6 +168,6 @@ export const SignupForm = ({ onToggleAuthState }: SignupFormProps) => {
           Sign In Instead
         </Button>
       </div>
-    </>
+    </div>
   );
 };
