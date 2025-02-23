@@ -38,7 +38,11 @@ export const Header = () => {
   }, []);
 
   const handleHome = () => {
-    navigate('/');
+    if (username) {
+      navigate('/home');
+    } else {
+      navigate('/');
+    }
   };
 
   const handleLogout = async () => {
