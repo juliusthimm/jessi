@@ -4,10 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { UserMode } from "@/types/auth";
 
 interface SignupFormProps {
   onToggleAuthState: () => void;
@@ -17,7 +15,6 @@ export const SignupForm = ({ onToggleAuthState }: SignupFormProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
-  const [mode, setMode] = useState<UserMode>("personal");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -59,7 +56,6 @@ export const SignupForm = ({ onToggleAuthState }: SignupFormProps) => {
           .from('profiles')
           .update({
             username,
-            mode,
           })
           .eq('id', authData.user.id);
 
@@ -126,30 +122,6 @@ export const SignupForm = ({ onToggleAuthState }: SignupFormProps) => {
           onChange={(e) => setPassword(e.target.value)}
           className="bg-white/10 border-white/20"
         />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="mode">Account Type</Label>
-        <Tabs 
-          value={mode} 
-          onValueChange={(value) => setMode(value as UserMode)}
-          className="w-full"
-        >
-          <TabsList className="w-full bg-pulse-700/50 border border-white/10">
-            <TabsTrigger 
-              value="personal"
-              className="flex-1 data-[state=active]:bg-pulse-600 data-[state=active]:text-pulse-100"
-            >
-              Personal
-            </TabsTrigger>
-            <TabsTrigger 
-              value="company"
-              className="flex-1 data-[state=active]:bg-pulse-600 data-[state=active]:text-pulse-100"
-            >
-              Company
-            </TabsTrigger>
-          </TabsList>
-        </Tabs>
       </div>
 
       <div className="space-y-2 pt-4">

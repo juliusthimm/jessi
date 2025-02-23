@@ -6,11 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { UserMode } from "@/types/auth";
 
 export const UserProfileForm = () => {
   const [username, setUsername] = useState<string>("");
-  const [mode, setMode] = useState<UserMode>("personal");
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const navigate = useNavigate();
@@ -27,7 +25,7 @@ export const UserProfileForm = () => {
 
         const { data: profile, error } = await supabase
           .from('profiles')
-          .select('username, mode')
+          .select('username')
           .eq('id', user.id)
           .maybeSingle();
 
@@ -35,7 +33,6 @@ export const UserProfileForm = () => {
 
         if (profile) {
           setUsername(profile.username || "");
-          setMode(profile.mode || "personal");
         }
       } catch (error) {
         console.error('Error loading profile:', error);
@@ -67,7 +64,6 @@ export const UserProfileForm = () => {
         .upsert({
           id: user.id,
           username,
-          mode
         })
         .select()
         .single();
@@ -79,11 +75,7 @@ export const UserProfileForm = () => {
         description: "Profile updated successfully",
       });
 
-      if (mode === 'company') {
-        navigate('/company-onboarding');
-      } else {
-        navigate('/');
-      }
+      navigate('/');
     } catch (error) {
       console.error('Error updating profile:', error);
       toast({
@@ -112,28 +104,6 @@ export const UserProfileForm = () => {
           onChange={(e) => setUsername(e.target.value)}
           className="bg-white/10 border-white/20"
         />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="mode">Account Type</Label>
-        <div className="flex gap-4">
-          <Button
-            type="button"
-            variant={mode === 'personal' ? 'default' : 'outline'}
-            onClick={() => setMode('personal')}
-            className={mode === 'personal' ? 'bg-pulse-700 hover:bg-pulse-600' : ''}
-          >
-            Personal
-          </Button>
-          <Button
-            type="button"
-            variant={mode === 'company' ? 'default' : 'outline'}
-            onClick={() => setMode('company')}
-            className={mode === 'company' ? 'bg-pulse-700 hover:bg-pulse-600' : ''}
-          >
-            Company
-          </Button>
-        </div>
       </div>
 
       <div className="pt-4">

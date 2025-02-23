@@ -149,7 +149,7 @@ const CompanyOnboarding = () => {
               <HeartPulse className="h-8 w-8 text-pulse-300" />
             </div>
             <h1 className="text-3xl font-bold">Company Setup</h1>
-            <p className="text-pulse-300">Create or join a company to get started</p>
+            <p className="text-pulse-300">Create or join a company (optional)</p>
           </div>
 
           <div className="space-y-4">
@@ -173,6 +173,15 @@ const CompanyOnboarding = () => {
                       onClick={() => setOnboardingState('JOIN')}
                     >
                       Join a Company
+                    </Button>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Button
+                      variant="outline"
+                      className="w-full text-pulse-300 hover:bg-pulse-700/50"
+                      onClick={() => navigate('/')}
+                    >
+                      Skip for Now
                     </Button>
                   </div>
                 </RadioGroup>
