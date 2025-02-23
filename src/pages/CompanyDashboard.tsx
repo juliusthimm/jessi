@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Briefcase } from "lucide-react";
+import { Briefcase, LineChart } from "lucide-react";
 import { TeamMembersList } from "@/components/company/TeamMembersList";
 import { InviteMembers } from "@/components/company/InviteMembers";
 import { CompanyRole } from "@/types/auth";
@@ -133,6 +133,15 @@ const CompanyDashboard = () => {
           </h1>
           <p className="text-pulse-300 mt-2">Company Management Dashboard</p>
         </div>
+        {(company.currentUserRole === 'hr' || company.currentUserRole === 'admin') && (
+          <Button 
+            onClick={() => navigate('/hr-reports')}
+            className="flex items-center gap-2"
+          >
+            <LineChart className="h-4 w-4" />
+            HR Reports
+          </Button>
+        )}
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
