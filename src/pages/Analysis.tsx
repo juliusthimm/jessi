@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { WELLBEING_TOPICS } from "@/constants/wellbeing-topics";
@@ -14,6 +15,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import type { ConversationResponse } from "@/types/elevenlabs";
+import { Send } from "lucide-react";
 
 const POLLING_INTERVAL = 2000;
 
@@ -23,6 +25,7 @@ const Analysis = () => {
   const { toast } = useToast();
   const [analysis, setAnalysis] = useState<ConversationResponse | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isSending, setIsSending] = useState(false);
 
   useEffect(() => {
     let pollInterval: number | null = null;
@@ -53,28 +56,6 @@ const Analysis = () => {
 
         const data: ConversationResponse = await response.json();
         setAnalysis(data);
-
-        // Store the analysis in the database
-        if (data.status === 'done') {
-          const { data: userData } = await supabase.auth.getUser();
-          if (userData.user) {
-            const { data: profileData } = await supabase
-              .from('profiles')
-              .select('company_id')
-              .eq('id', userData.user.id)
-              .single();
-
-            await supabase.from('conversation_analyses').insert({
-              conversation_id: conversationId,
-              user_id: userData.user.id,
-              company_id: profileData?.company_id,
-              status: data.status,
-              transcript: data.transcript,
-              metadata: data.metadata,
-              analysis: data.analysis,
-            });
-          }
-        }
 
         // If status is 'done' or 'error', stop polling
         if (data.status !== 'processing') {
@@ -108,6 +89,48 @@ const Analysis = () => {
       }
     };
   }, [conversationId, loading, toast]);
+
+  const handleSendToEmployer = async () => {
+    try {
+      setIsSending(true);
+      const { data: userData } = await supabase.auth.getUser();
+      if (!userData.user || !analysis) {
+        throw new Error('User or analysis data not available');
+      }
+
+      const { data: profileData } = await supabase
+        .from('profiles')
+        .select('company_id')
+        .eq('id', userData.user.id)
+        .single();
+
+      const { error: insertError } = await supabase.from('conversation_analyses').insert({
+        conversation_id: conversationId,
+        user_id: userData.user.id,
+        company_id: profileData?.company_id,
+        status: analysis.status,
+        transcript: analysis.transcript,
+        metadata: analysis.metadata,
+        analysis: analysis.analysis,
+      });
+
+      if (insertError) throw insertError;
+
+      toast({
+        title: "Success",
+        description: "Assessment sent to employer successfully",
+      });
+    } catch (error) {
+      console.error('Error sending to employer:', error);
+      toast({
+        title: "Error",
+        description: "Failed to send assessment to employer",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSending(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -160,7 +183,17 @@ const Analysis = () => {
     <div className="min-h-screen bg-pulse-800 text-pulse-100 flex flex-col">
       <main className="flex-1 p-8">
         <div className="max-w-4xl mx-auto space-y-8">
-          <h1 className="text-3xl font-bold">Wellbeing Analysis</h1>
+          <div className="flex items-center justify-between">
+            <h1 className="text-3xl font-bold">Wellbeing Analysis</h1>
+            <Button 
+              onClick={handleSendToEmployer}
+              disabled={isSending}
+              className="bg-pulse-600 hover:bg-pulse-500"
+            >
+              <Send className="w-4 h-4 mr-2" />
+              {isSending ? "Sending..." : "Send to Employer"}
+            </Button>
+          </div>
           
           <div className="p-6 rounded-xl bg-white/5 backdrop-blur-lg border border-white/10">
             <h2 className="text-xl font-semibold mb-4">Conversation Summary</h2>
