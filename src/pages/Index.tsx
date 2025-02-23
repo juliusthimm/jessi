@@ -40,7 +40,7 @@ const Index = () => {
       <div className="container max-w-2xl mx-auto space-y-8 text-center relative animate-fade-in my-0 py-[90px]">
         <h1 style={{
           fontFamily: 'Instrument Serif'
-        }} className="text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text leading-tight max-w-4xl mx-auto text-left md:text-[AA8BFF]">
+        }} className="text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text leading-tight max-w-4xl mx-auto text-left md:text-[AA8BFF] text-[#aa8bff]">
           Employee pulse surveys suck.
         </h1>
         <div className="space-y-4 text-xl md:text-2xl max-w-2xl mx-auto">
