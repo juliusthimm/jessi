@@ -51,7 +51,7 @@ const HRReports = () => {
             user_id,
             analysis,
             created_at,
-            user_profile:user_id(username)
+            user_profile:profiles(username)
           `)
           .eq('company_id', userCompany.company_id)
           .eq('status', 'done')
@@ -60,14 +60,17 @@ const HRReports = () => {
         if (error) throw error;
         
         // Transform the data to match the AnalysisRecord type
-        const typedData: AnalysisRecord[] = (analysesData || []).map(record => ({
-          id: record.id,
-          conversation_id: record.conversation_id,
-          user_id: record.user_id,
-          analysis: record.analysis as ConversationResponse['analysis'],
-          created_at: record.created_at,
-          user_profile: record.user_profile as { username: string | null } | null
-        }));
+        const typedData: AnalysisRecord[] = (analysesData || []).map(record => {
+          const userProfile = record.user_profile as unknown as { username: string | null }[];
+          return {
+            id: record.id,
+            conversation_id: record.conversation_id,
+            user_id: record.user_id,
+            analysis: record.analysis as ConversationResponse['analysis'],
+            created_at: record.created_at,
+            user_profile: userProfile?.[0] ?? null
+          };
+        });
         
         setAnalyses(typedData);
       } catch (error) {
