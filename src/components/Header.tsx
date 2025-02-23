@@ -35,10 +35,6 @@ export const Header = () => {
     navigate('/auth');
   };
 
-  const handleNewAssessment = () => {
-    navigate('/');
-  };
-
   const handleCompanyDashboard = () => {
     navigate('/company');
   };
@@ -56,9 +52,6 @@ export const Header = () => {
           <span className="font-semibold text-pulse-100 text-xl">Pulsato</span>
         </div>
         <div className="flex items-center gap-4">
-          <Button onClick={handleNewAssessment} className="bg-pulse-700 hover:bg-pulse-600 text-white">
-            New Assessment
-          </Button>
           <Button onClick={handleCompanyDashboard} className="bg-pulse-700 hover:bg-pulse-600 text-white">
             <Building2 className="h-5 w-5 mr-2" />
             Company
