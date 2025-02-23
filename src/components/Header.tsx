@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { HeartPulse, LogOut } from "lucide-react";
+import { HeartPulse, LogOut, Building2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Header = () => {
@@ -14,6 +14,10 @@ export const Header = () => {
 
   const handleNewAssessment = () => {
     navigate('/');
+  };
+
+  const handleCompanyDashboard = () => {
+    navigate('/company');
   };
 
   return (
@@ -30,6 +34,14 @@ export const Header = () => {
             className="text-pulse-300 hover:text-pulse-100"
           >
             New Assessment
+          </Button>
+          <Button
+            variant="ghost"
+            onClick={handleCompanyDashboard}
+            className="text-pulse-300 hover:text-pulse-100"
+          >
+            <Building2 className="h-5 w-5 mr-2" />
+            Company
           </Button>
           <Button
             variant="ghost"
