@@ -55,10 +55,9 @@ const Index = () => {
             </Button>
           </div>
         </div>
-
-        <div className="flex items-center gap-2">
-            <img src="/lovable-uploads/wave.png" alt="Pulsato Logo" />
-          </div>
+        <div className="w-screen relative left-[50%] right-[50%] -mx-[50vw] -mt-[10%]">
+            <img src="/lovable-uploads/wave.png" alt="Pulsato Logo" className="w-full" />
+        </div>
       </section>
 
       {/* Maya Section */}
@@ -82,21 +81,24 @@ const Index = () => {
               insights for your people team across seven key categories.
             </p>
           </div>
-
           {/* Categories Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-6">
-            {Object.values(WELLBEING_TOPICS).map((topic, index) => 
-              <Card 
-                key={topic.id} 
-                className="p-6 glass-card bg-gradient-to-br from-white/10 to-white/5 
-                  hover:from-white/20 hover:to-white/10
-                  transition-all duration-500 ease-in-out
-                  hover:scale-105 hover:shadow-xl hover:shadow-purple-500/20
-                  cursor-pointer group"
-              >
-                <p className="text-sm font-medium text-pulse-100 group-hover:text-white transition-colors">{topic.title}</p>
-              </Card>
-            )}
+          <div className="overflow-x-auto pb-4">
+            <div className="flex gap-4" style={{ minWidth: 'max-content' }}>
+              {Object.values(WELLBEING_TOPICS).map((topic, index) => 
+                <Card 
+                  key={topic.id} 
+                  className="p-6 glass-card bg-gradient-to-br from-white/10 to-white/5 
+                    hover:from-white/20 hover:to-white/10
+                    transition-all duration-500 ease-in-out
+                    hover:scale-105 hover:shadow-xl hover:shadow-purple-500/20
+                    cursor-pointer group
+                    min-w-[200px]
+                    min-h-[200px]"
+                >
+                  <p className="text-base font-medium text-pulse-100 group-hover:text-white transition-colors truncate">{topic.title}</p>
+                </Card>
+              )}
+            </div>
           </div>
         </div>
       </section>
