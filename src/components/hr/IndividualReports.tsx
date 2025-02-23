@@ -27,25 +27,25 @@ interface IndividualReportsProps {
 
 export const IndividualReports = ({ analyses }: IndividualReportsProps) => {
   return (
-    <Accordion type="single" collapsible className="space-y-4">
+    <Accordion type="single" collapsible className="space-y-2">
       {analyses.map((record) => (
         <AccordionItem
           key={record.id}
           value={record.id}
-          className="p-4 rounded-xl bg-white/5 backdrop-blur-lg border border-white/10"
+          className="px-3 py-2 rounded-lg bg-white/5 backdrop-blur-lg border border-white/10"
         >
           <AccordionTrigger className="hover:no-underline">
-            <div className="flex flex-col items-start">
-              <h3 className="text-lg font-semibold text-pulse-100">
+            <div className="flex flex-col items-start text-left">
+              <h3 className="text-sm font-medium text-pulse-100">
                 {record.user_profile?.username || 'Anonymous User'}
               </h3>
-              <p className="text-sm text-pulse-300">
+              <p className="text-xs text-pulse-300">
                 {format(new Date(record.created_at), "PPP")}
               </p>
             </div>
           </AccordionTrigger>
           <AccordionContent>
-            <div className="grid gap-4 md:grid-cols-2 pt-4">
+            <div className="grid grid-cols-2 gap-2 pt-2">
               {Object.entries(WELLBEING_TOPICS).map(([key, topic]) => {
                 const topicData = record.analysis?.data_collection_results?.[topic.id];
                 return (
