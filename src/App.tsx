@@ -30,7 +30,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Auth page doesn't use MainLayout since it has its own layout */}
+        {/* Public routes */}
+        <Route path="/" element={!isAuthenticated ? <Index /> : <Navigate to="/home" />} />
         <Route
           path="/auth"
           element={!isAuthenticated ? <Auth /> : <Navigate to="/home" />}
@@ -38,7 +39,6 @@ function App() {
         
         {/* Protected routes with MainLayout */}
         <Route element={isAuthenticated ? <MainLayout /> : <Navigate to="/auth" />}>
-          <Route path="/" element={<Navigate to="/home" replace />} />
           <Route path="/home" element={<Home />} />
           <Route path="/analysis/:conversationId" element={<Analysis />} />
           <Route path="/company" element={<CompanyDashboard />} />
