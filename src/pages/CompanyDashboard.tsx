@@ -13,7 +13,6 @@ interface CompanyMember {
   user_id: string;
   role: 'admin' | 'hr' | 'employee';
   profiles: {
-    email?: string;
     username?: string;
   } | null;
 }
@@ -71,7 +70,6 @@ const CompanyDashboard = () => {
           user_id,
           role,
           profiles:profiles (
-            email,
             username
           )
         `)
