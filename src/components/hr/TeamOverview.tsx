@@ -25,6 +25,12 @@ export const TeamOverview = ({ averageScores, dateRange, analyses }: TeamOvervie
   // Count unique user IDs who contributed to any score
   const uniqueContributors = Object.values(analyses).length;
 
+  // Round scores to nearest integer
+  const roundedScores = Object.entries(averageScores).reduce((acc, [key, value]) => {
+    acc[key] = value !== null ? Math.round(value) : null;
+    return acc;
+  }, {} as Record<string, number | null>);
+
   return (
     <div className="p-6 rounded-xl bg-white/5 backdrop-blur-lg border border-white/10">
       <div className="space-y-4">
@@ -38,7 +44,7 @@ export const TeamOverview = ({ averageScores, dateRange, analyses }: TeamOvervie
         </div>
         <div className="grid gap-4 md:grid-cols-2">
           {Object.entries(WELLBEING_TOPICS).map(([key, topic]) => {
-            const score = averageScores[topic.id];
+            const score = roundedScores[topic.id];
             return (
               <CategoryScore
                 key={topic.id}
