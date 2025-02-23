@@ -8,22 +8,33 @@ import { useEffect, useState } from "react";
 export const Header = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState<string>("");
+  const [companyName, setCompanyName] = useState<string>("");
 
   useEffect(() => {
-    const getUsername = async () => {
+    const getUserData = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
+        // Fetch user profile and company data in one query using joins
         const { data } = await supabase
           .from('profiles')
-          .select('username')
+          .select(`
+            username,
+            companies:company_id (
+              name
+            )
+          `)
           .eq('id', user.id)
           .single();
+
         if (data?.username) {
           setUsername(data.username);
         }
+        if (data?.companies?.name) {
+          setCompanyName(data.companies.name);
+        }
       }
     };
-    getUsername();
+    getUserData();
   }, []);
 
   const handleHome = () => {
@@ -36,7 +47,11 @@ export const Header = () => {
   };
 
   const handleCompanyDashboard = () => {
-    navigate('/company');
+    if (companyName) {
+      navigate('/company');
+    } else {
+      navigate('/company-onboarding');
+    }
   };
 
   const handleProfile = () => {
@@ -54,7 +69,7 @@ export const Header = () => {
         <div className="flex items-center gap-4">
           <Button onClick={handleCompanyDashboard} className="bg-pulse-700 hover:bg-pulse-600 text-white">
             <Building2 className="h-5 w-5 mr-2" />
-            Company
+            {companyName || 'Create team'}
           </Button>
           <Button onClick={handleProfile} className="bg-pulse-700 hover:bg-pulse-600 text-white">
             <User className="h-5 w-5 mr-2" />
