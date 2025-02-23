@@ -10,7 +10,7 @@ const Index = () => {
   useEffect(() => {
     WebFont.load({
       google: {
-        families: ['Roboto Condensed']
+        families: ['Roboto Serif:wght@400']
       }
     });
   }, []);
@@ -42,7 +42,8 @@ const Index = () => {
     <section className="min-h-screen pt-32 flex-column items-center justify-center px-4 relative overflow-hidden">
       <div className="container max-w-2xl mx-auto space-y-8 text-center relative animate-fade-in my-0 py-[90px]">
         <h1 style={{
-          fontFamily: 'Roboto Condensed'
+          fontFamily: 'Roboto Serif',
+          fontStretch: 'condensed'
         }} className="text-5xl text-[#AA8BFF] leading-tight max-w-4xl mx-auto text-left font-normal">
           Employee pulse surveys suck.
         </h1>
