@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
@@ -6,7 +5,6 @@ import { WELLBEING_TOPICS } from "@/constants/wellbeing-topics";
 import { ArrowRight } from "lucide-react";
 import WebFont from 'webfontloader';
 import { useEffect } from "react";
-
 const Index = () => {
   useEffect(() => {
     WebFont.load({
@@ -47,7 +45,7 @@ const Index = () => {
           <p className="text-pulse-300 font-normal text-left">Self-submission surveys to measure employee wellbeing is like trying to capture the full story of a book in one sentence.</p>
         </div>
         <div className="pt-8 text-left">
-          <Button size="lg" className="bg-white text-gray-900 hover:bg-[#AA8BFF] hover:text-white transition-all duration-300 gap-2 text-lg border-0 shadow-lg shadow-white/25 hover:shadow-[#AA8BFF]/25" onClick={handleSignup}>
+          <Button size="lg" className="bg-[#AA8BFF] hover:opacity-90 transition-all duration-300 text-white gap-2 text-lg border-0 shadow-lg shadow-[#AA8BFF]/25" onClick={handleSignup}>
             Transform your employee wellbeing
             <ArrowRight className="h-5 w-5" />
           </Button>
@@ -201,5 +199,4 @@ const Index = () => {
     </footer>
   </div>;
 };
-
 export default Index;
