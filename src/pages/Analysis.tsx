@@ -98,6 +98,17 @@ const Analysis = () => {
         throw new Error('User or analysis data not available');
       }
 
+      // Check if the call was successful
+      const callSuccessful = analysis.metadata?.call_successful === "success";
+      if (!callSuccessful) {
+        toast({
+          title: "Cannot Send Report",
+          description: "Only successful conversations can be sent to your employer",
+          variant: "destructive",
+        });
+        return;
+      }
+
       const { data: profileData } = await supabase
         .from('profiles')
         .select('company_id')
