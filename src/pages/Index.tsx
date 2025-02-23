@@ -1,21 +1,44 @@
+
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { WELLBEING_TOPICS } from "@/constants/wellbeing-topics";
 import { ArrowRight } from "lucide-react";
 import WebFont from 'webfontloader';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+
 const Index = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
   useEffect(() => {
     WebFont.load({
       google: {
         families: ['Instrument Serif']
       }
     });
+
+    // Check authentication status
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setIsLoggedIn(!!session);
+    };
+    
+    checkAuth();
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsLoggedIn(!!session);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
+
   const navigate = useNavigate();
   const handleLogin = () => navigate("/auth");
   const handleSignup = () => navigate("/auth?tab=signup");
+  const handleMainCTA = () => navigate(isLoggedIn ? "/home" : "/auth");
+
   return <div className="min-h-screen bg-pulse-800 text-pulse-100">
     {/* Header */}
     <header className="fixed top-0 w-full z-50 bg-gradient-to-b from-pulse-800 via-pulse-800/95 to-pulse-800/80 backdrop-blur-xl border-b border-white/5">
@@ -45,11 +68,13 @@ const Index = () => {
         </h1>
         <div className="space-y-4 text-xl md:text-2xl max-w-2xl mx-auto">
           <p className="text-pulse-300 font-normal text-left">Self-submission surveys to measure employee wellbeing is like trying to capture the full story of a book in one sentence.</p>
-          
-          
         </div>
         <div className="pt-8 text-left">
-          <Button size="lg" className="bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 transition-all duration-300 text-white gap-2 text-lg border-0 shadow-lg shadow-purple-500/25" onClick={handleSignup}>
+          <Button 
+            size="lg" 
+            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 transition-all duration-300 text-white gap-2 text-lg border-0" 
+            onClick={handleMainCTA}
+          >
             Transform your employee wellbeing
             <ArrowRight className="h-5 w-5" />
           </Button>
@@ -203,4 +228,5 @@ const Index = () => {
     </footer>
   </div>;
 };
+
 export default Index;
