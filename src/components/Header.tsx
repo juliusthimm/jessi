@@ -47,7 +47,7 @@ export const Header = () => {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    navigate('/auth');
+    navigate('/');
   };
 
   const handleCompanyDashboard = () => {
