@@ -1,94 +1,142 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { ChatInterface } from "@/components/ChatInterface";
-import { WellbeingScore } from "@/components/WellbeingScore";
-import { ActionStep } from "@/components/ActionStep";
-import { CategoryScore } from "@/components/CategoryScore";
 import { Button } from "@/components/ui/button";
-import { HeartPulse } from "lucide-react";
+import { HeartPulse, History, BarChart2, FileText } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { CompanyRole } from "@/types/auth";
+import { AnalysisHistory } from "@/components/AnalysisHistory";
+import { Card } from "@/components/ui/card";
 
 const Index = () => {
-  const [stage, setStage] = useState<"welcome" | "assessment" | "report">("welcome");
-  const mockReport = {
-    score: 72,
-    categories: [{
-      title: "Work Conditions",
-      score: 75,
-      description: "Good workplace atmosphere with some room for improvement in workload management."
-    }, {
-      title: "Motivation & Values",
-      score: 82,
-      description: "High alignment between personal values and work, clear goals established."
-    }, {
-      title: "Skills & Knowledge",
-      score: 68,
-      description: "Core skills present but additional training opportunities needed."
-    }, {
-      title: "Health & Ability",
-      score: 70,
-      description: "Generally good psychological resources with some stress management needs."
-    }],
-    actionSteps: [{
-      title: "Morning Mindfulness",
-      description: "Start your day with 10 minutes of meditation to reduce stress levels."
-    }, {
-      title: "Work-Life Balance",
-      description: "Set clear boundaries between work and personal time."
-    }, {
-      title: "Social Connection",
-      description: "Schedule regular check-ins with friends or family members."
-    }]
+  const [showAssessment, setShowAssessment] = useState(false);
+  const [userRole, setUserRole] = useState<CompanyRole | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [totalChats, setTotalChats] = useState(0);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUserRole = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          navigate('/auth');
+          return;
+        }
+
+        const { data: member } = await supabase
+          .from('company_members')
+          .select('role')
+          .eq('user_id', user.id)
+          .single();
+
+        setUserRole(member?.role || null);
+
+        // If admin, fetch total chats
+        if (member?.role === 'admin') {
+          const { count } = await supabase
+            .from('conversation_analyses')
+            .select('*', { count: 'exact', head: true });
+          setTotalChats(count || 0);
+        }
+      } catch (error) {
+        console.error('Error fetching user role:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserRole();
+  }, [navigate]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-pulse-300"></div>
+      </div>
+    );
+  }
+
+  const renderDashboard = () => {
+    const commonElements = (
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Main Content - Takes up 2 columns */}
+        <div className="lg:col-span-2 space-y-6">
+          {!showAssessment ? (
+            <Card className="p-6 bg-white/5 backdrop-blur-lg border-white/10">
+              <div className="text-center space-y-6">
+                <div className="inline-flex items-center justify-center p-3 rounded-full bg-pulse-700/50">
+                  <HeartPulse className="h-8 w-8 text-pulse-300" />
+                </div>
+                <h1 className="text-3xl font-bold">How are you doing today?</h1>
+                <p className="text-lg text-pulse-300">Take a quick assessment to check your wellbeing</p>
+                <Button 
+                  size="lg" 
+                  className="bg-pulse-700 hover:bg-pulse-600 text-white"
+                  onClick={() => setShowAssessment(true)}
+                >
+                  Start Assessment
+                </Button>
+              </div>
+            </Card>
+          ) : (
+            <ChatInterface onComplete={() => setShowAssessment(false)} />
+          )}
+
+          {/* Admin Stats */}
+          {userRole === 'admin' && (
+            <Card className="p-6 bg-white/5 backdrop-blur-lg border-white/10">
+              <div className="flex items-center gap-4">
+                <div className="p-3 rounded-full bg-pulse-700/50">
+                  <BarChart2 className="h-6 w-6 text-pulse-300" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-semibold">Total Assessments</h2>
+                  <p className="text-3xl font-bold text-pulse-300">{totalChats}</p>
+                </div>
+              </div>
+            </Card>
+          )}
+
+          {/* HR Actions */}
+          {userRole === 'hr' && (
+            <Card className="p-6 bg-white/5 backdrop-blur-lg border-white/10">
+              <div className="space-y-4">
+                <h2 className="text-xl font-semibold">HR Tools</h2>
+                <div className="flex gap-4">
+                  <Button 
+                    className="bg-pulse-700 hover:bg-pulse-600"
+                    onClick={() => navigate('/hr-reports')}
+                  >
+                    <FileText className="mr-2" />
+                    View Team Reports
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          )}
+        </div>
+
+        {/* Sidebar - Takes up 1 column */}
+        <div className="space-y-6">
+          <Card className="p-6 bg-white/5 backdrop-blur-lg border-white/10">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-semibold">Recent History</h2>
+              <History className="h-5 w-5 text-pulse-300" />
+            </div>
+            <AnalysisHistory />
+          </Card>
+        </div>
+      </div>
+    );
+
+    return commonElements;
   };
 
   return (
-    <div className="container max-w-5xl mx-auto px-4 py-12">
-      {stage === "welcome" && (
-        <div className="text-center space-y-8 animate-fadeIn">
-          <div className="inline-flex items-center justify-center p-3 rounded-full bg-pulse-700/50 mb-8">
-            <HeartPulse className="h-8 w-8 text-pulse-300" />
-          </div>
-          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
-            Wellbeing Pulse Check
-          </h1>
-          <p className="text-lg text-pulse-300 max-w-2xl mx-auto">Have a quick Pule Check by chatting with Jessi to assess your wellbeing at work.</p>
-          <Button size="lg" className="bg-pulse-700 hover:bg-pulse-600 text-white" onClick={() => setStage("assessment")}>
-            Start Assessment
-          </Button>
-        </div>
-      )}
-
-      {stage === "assessment" && (
-        <div className="animate-fadeIn">
-          <ChatInterface onComplete={() => setStage("report")} />
-        </div>
-      )}
-
-      {stage === "report" && (
-        <div className="space-y-8 animate-fadeIn">
-          <h2 className="text-3xl font-bold text-center mb-8">Your Wellbeing Report</h2>
-          
-          <WellbeingScore score={mockReport.score} />
-          
-          <div className="space-y-6">
-            <h3 className="text-xl font-semibold">Category Breakdown</h3>
-            <div className="grid gap-4 md:grid-cols-2">
-              {mockReport.categories.map((category, index) => <CategoryScore key={index} {...category} />)}
-            </div>
-          </div>
-
-          <div className="space-y-6">
-            <h3 className="text-xl font-semibold">Recommended Action Steps</h3>
-            <div className="grid gap-4">
-              {mockReport.actionSteps.map((step, index) => <ActionStep key={index} {...step} />)}
-            </div>
-          </div>
-
-          <div className="text-center pt-8">
-            <Button variant="outline" onClick={() => setStage("welcome")} className="hover:bg-pulse-700">
-              Start New Assessment
-            </Button>
-          </div>
-        </div>
-      )}
+    <div className="container max-w-7xl mx-auto px-4 py-8">
+      {renderDashboard()}
     </div>
   );
 };
