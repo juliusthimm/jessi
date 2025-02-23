@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "./integrations/supabase/client";
 import { MainLayout } from "@/components/layouts/MainLayout";
 import Profile from "./pages/Profile";
+import Home from "./pages/Home";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
@@ -32,12 +33,13 @@ function App() {
         {/* Auth page doesn't use MainLayout since it has its own layout */}
         <Route
           path="/auth"
-          element={!isAuthenticated ? <Auth /> : <Navigate to="/" />}
+          element={!isAuthenticated ? <Auth /> : <Navigate to="/home" />}
         />
         
         {/* Protected routes with MainLayout */}
         <Route element={isAuthenticated ? <MainLayout /> : <Navigate to="/auth" />}>
-          <Route path="/" element={<Index />} />
+          <Route path="/" element={<Navigate to="/home" replace />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/analysis/:conversationId" element={<Analysis />} />
           <Route path="/company" element={<CompanyDashboard />} />
           <Route path="/company-onboarding" element={<CompanyOnboarding />} />
