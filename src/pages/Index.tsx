@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
@@ -6,7 +5,6 @@ import { WELLBEING_TOPICS } from "@/constants/wellbeing-topics";
 import { ArrowRight } from "lucide-react";
 import WebFont from 'webfontloader';
 import { useEffect } from "react";
-
 const Index = () => {
   useEffect(() => {
     WebFont.load({
@@ -15,11 +13,9 @@ const Index = () => {
       }
     });
   }, []);
-  
   const navigate = useNavigate();
   const handleLogin = () => navigate("/auth");
   const handleSignup = () => navigate("/auth?tab=signup");
-
   return <div className="min-h-screen bg-pulse-800 text-pulse-100">
     {/* Header */}
     <header className="fixed top-0 w-full z-50 bg-gradient-to-b from-pulse-800 via-pulse-800/95 to-pulse-800/80 backdrop-blur-xl border-b border-white/5">
@@ -48,7 +44,7 @@ const Index = () => {
           Employee pulse surveys suck.
         </h1>
         <div className="space-y-4 text-xl md:text-2xl max-w-2xl mx-auto">
-          <p className="text-pulse-300 font-normal text-left">Self-rating your wellbeing from 0 to 10 is like reading one sentence of a book....</p>
+          <p className="text-pulse-300 font-normal text-left">Meet the new standard for modern employee wellbeing.</p>
           
           <p className="font-semibold text-pulse-100 mt-32 text-left">You miss the story & emotions.</p>
         </div>
@@ -99,21 +95,16 @@ const Index = () => {
             <div className="flex gap-4" style={{
               minWidth: 'max-content'
             }}>
-              {Object.values(WELLBEING_TOPICS).map((topic, index) => (
-                <Card 
-                  key={topic.id} 
-                  className="p-6 glass-card bg-white/5
+              {Object.values(WELLBEING_TOPICS).map((topic, index) => <Card key={topic.id} className="p-6 glass-card bg-white/5
                     hover:bg-white/20
                     transition-all duration-500 ease-in-out
                     cursor-pointer group
                     min-w-[200px]
-                    min-h-[200px]"
-                >
+                    min-h-[200px]">
                   <p className="text-base font-medium text-pulse-100 group-hover:text-white transition-colors truncate">
                     {topic.title}
                   </p>
-                </Card>
-              ))}
+                </Card>)}
             </div>
           </div>
         </div>
@@ -212,5 +203,4 @@ const Index = () => {
     </footer>
   </div>;
 };
-
 export default Index;
