@@ -70,7 +70,7 @@ const Index = () => {
         <div className="space-y-4 text-xl md:text-2xl max-w-2xl mx-auto">
           <p className="text-pulse-300 text-left font-normal text-lg">Self-submission surveys to measure employee wellbeing is like trying to capture the full story of a book in one sentence.</p>
         </div>
-        <div className="pt-8 text-left">
+        <div className="pt-8 text-left py-0">
           <Button size="lg" className="bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 transition-all duration-300 text-white gap-2 text-lg border-0" onClick={handleMainCTA}>
             Transform your employee wellbeing
             <ArrowRight className="h-5 w-5" />
