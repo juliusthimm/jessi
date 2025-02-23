@@ -3,15 +3,21 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { HeartPulse } from "lucide-react";
+import { HeartPulse, ArrowLeft } from "lucide-react";
 import { Footer } from "@/components/Footer";
+import { AuthState, UserMode } from "@/types/auth";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [mode, setMode] = useState<UserMode>("personal");
   const [loading, setLoading] = useState(false);
+  const [authState, setAuthState] = useState<AuthState>("LOGIN");
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -60,16 +66,79 @@ const Auth = () => {
             variant: "destructive",
           });
         } else {
-          toast({
-            title: "Check your email",
-            description: "We've sent you a confirmation link to complete your registration",
-          });
+          // After successful signup, update the user's profile with their selected mode
+          const { error: profileError } = await supabase
+            .from('profiles')
+            .update({ mode })
+            .eq('id', data.user.id);
+
+          if (profileError) {
+            toast({
+              title: "Error",
+              description: "Failed to set user mode",
+              variant: "destructive",
+            });
+            return;
+          }
+
+          if (mode === 'company') {
+            setAuthState('CREATE_COMPANY');
+          } else {
+            toast({
+              title: "Check your email",
+              description: "We've sent you a confirmation link to complete your registration",
+            });
+          }
         }
       }
     } catch (error) {
       toast({
         title: "Error",
         description: "An unexpected error occurred",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCreateCompany = async () => {
+    try {
+      setLoading(true);
+
+      // Insert the company
+      const { data: companyData, error: companyError } = await supabase
+        .from('companies')
+        .insert([{ name: companyName }])
+        .select()
+        .single();
+
+      if (companyError || !companyData) {
+        throw new Error(companyError?.message || "Failed to create company");
+      }
+
+      // Add the user as an admin
+      const { error: memberError } = await supabase
+        .from('company_members')
+        .insert([{
+          company_id: companyData.id,
+          user_id: (await supabase.auth.getUser()).data.user?.id,
+          role: 'admin'
+        }]);
+
+      if (memberError) {
+        throw new Error(memberError.message);
+      }
+
+      toast({
+        title: "Company created",
+        description: "Your company has been created successfully",
+      });
+      navigate("/");
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to create company",
         variant: "destructive",
       });
     } finally {
@@ -86,40 +155,93 @@ const Auth = () => {
               <HeartPulse className="h-8 w-8 text-pulse-300" />
             </div>
             <h1 className="text-3xl font-bold">Welcome to Pulse</h1>
-            <p className="text-pulse-300">Sign in or create an account to continue</p>
+            {authState === 'CREATE_COMPANY' ? (
+              <p className="text-pulse-300">Create your company profile</p>
+            ) : (
+              <p className="text-pulse-300">Sign in or create an account to continue</p>
+            )}
           </div>
 
           <div className="space-y-4">
-            <Input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="bg-white/10 border-white/20"
-            />
-            <Input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="bg-white/10 border-white/20"
-            />
-            <div className="space-y-2">
-              <Button
-                className="w-full bg-pulse-700 hover:bg-pulse-600"
-                onClick={() => handleAuth("LOGIN")}
-                disabled={loading}
-              >
-                {loading ? "Processing..." : "Sign In"}
-              </Button>
-              <Button
-                className="w-full hover:bg-pulse-700"
-                onClick={() => handleAuth("SIGNUP")}
-                disabled={loading}
-              >
-                Create Account
-              </Button>
-            </div>
+            {authState === 'CREATE_COMPANY' ? (
+              <>
+                <Button
+                  variant="ghost"
+                  className="mb-4"
+                  onClick={() => setAuthState('SIGNUP')}
+                >
+                  <ArrowLeft className="mr-2 h-4 w-4" /> Back
+                </Button>
+                <Input
+                  type="text"
+                  placeholder="Company Name"
+                  value={companyName}
+                  onChange={(e) => setCompanyName(e.target.value)}
+                  className="bg-white/10 border-white/20"
+                />
+                <Button
+                  className="w-full bg-pulse-700 hover:bg-pulse-600"
+                  onClick={handleCreateCompany}
+                  disabled={loading || !companyName}
+                >
+                  {loading ? "Creating..." : "Create Company"}
+                </Button>
+              </>
+            ) : (
+              <>
+                <Input
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="bg-white/10 border-white/20"
+                />
+                <Input
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="bg-white/10 border-white/20"
+                />
+
+                {authState === 'SIGNUP' && (
+                  <div className="p-4 bg-white/5 rounded-lg space-y-3">
+                    <Label className="text-sm font-medium">Account Type</Label>
+                    <RadioGroup
+                      value={mode}
+                      onValueChange={(value) => setMode(value as UserMode)}
+                      className="space-y-2"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="personal" id="personal" />
+                        <Label htmlFor="personal">Personal Account</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="company" id="company" />
+                        <Label htmlFor="company">Company Account</Label>
+                      </div>
+                    </RadioGroup>
+                  </div>
+                )}
+
+                <div className="space-y-2">
+                  <Button
+                    className="w-full bg-pulse-700 hover:bg-pulse-600"
+                    onClick={() => handleAuth("LOGIN")}
+                    disabled={loading}
+                  >
+                    {loading ? "Processing..." : "Sign In"}
+                  </Button>
+                  <Button
+                    className="w-full hover:bg-pulse-700"
+                    onClick={() => handleAuth("SIGNUP")}
+                    disabled={loading}
+                  >
+                    Create Account
+                  </Button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
