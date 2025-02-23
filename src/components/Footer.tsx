@@ -9,7 +9,7 @@ export const Footer = () => {
           © {new Date().getFullYear()} Pulse. All rights reserved.
         </p>
         <a
-          href="https://github.com/yourusername/pulse"
+          href="https://github.com/juliusthimm/jessi"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-2 text-sm text-pulse-300 hover:text-pulse-100 transition-colors"

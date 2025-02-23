@@ -21,26 +21,6 @@ export const ChatHeader = ({ isConfigured, onEndAssessment, onLogout }: ChatHead
             <p className="text-sm text-pulse-300">AI-powered assessment</p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          {/* {isConfigured && (
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={onEndAssessment}
-              className="text-pulse-300 hover:text-pulse-100"
-            >
-              <Settings className="h-5 w-5" />
-            </Button>
-          )} */}
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onLogout}
-            className="text-pulse-300 hover:text-pulse-100"
-          >
-            <LogOut className="h-5 w-5" />
-          </Button>
-        </div>
       </div>
     </div>
   );
