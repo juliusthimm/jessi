@@ -51,7 +51,7 @@ const HRReports = () => {
             user_id,
             analysis,
             created_at,
-            profiles (
+            profiles!conversation_analyses_user_id_fkey (
               username
             )
           `)
@@ -60,7 +60,14 @@ const HRReports = () => {
           .order('created_at', { ascending: false });
 
         if (error) throw error;
-        setAnalyses(data || []);
+        
+        // Type assertion to handle the JSON to ConversationResponse['analysis'] conversion
+        const typedData = data?.map(record => ({
+          ...record,
+          analysis: record.analysis as ConversationResponse['analysis']
+        })) || [];
+        
+        setAnalyses(typedData);
       } catch (error) {
         toast({
           title: "Error",
