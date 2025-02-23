@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { CompanyRole } from "@/types/auth";
 import { AnalysisHistory } from "@/components/AnalysisHistory";
 import { Card } from "@/components/ui/card";
-import { formatDistanceToNow, format, differenceInDays } from "date-fns";
+import { formatDistance, format, differenceInDays } from "date-fns";
 
 const Home = () => {
   const [showAssessment, setShowAssessment] = useState(false);
@@ -57,7 +57,11 @@ const Home = () => {
           const date = new Date(lastAssessment.created_at);
           const daysDifference = differenceInDays(new Date(), date);
           if (daysDifference <= 7) {
-            setLastAssessmentDate(formatDistanceToNow(date, { addSuffix: true }));
+            const distance = formatDistance(date, new Date(), { 
+              includeSeconds: false,
+              addSuffix: true
+            });
+            setLastAssessmentDate(distance);
           } else {
             setLastAssessmentDate(format(date, 'MMMM do, yyyy'));
           }
