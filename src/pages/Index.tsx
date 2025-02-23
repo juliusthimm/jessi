@@ -1,17 +1,13 @@
-
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { WELLBEING_TOPICS } from "@/constants/wellbeing-topics";
 import { ArrowRight } from "lucide-react";
-
 const Index = () => {
   const navigate = useNavigate();
   const handleLogin = () => navigate("/auth");
   const handleSignup = () => navigate("/auth?tab=signup");
-
-  return (
-    <div className="min-h-screen bg-pulse-800 text-pulse-100">
+  return <div className="min-h-screen bg-pulse-800 text-pulse-100">
       {/* Header */}
       <header className="fixed top-0 w-full z-50 bg-gradient-to-b from-pulse-800 via-pulse-800/95 to-pulse-800/80 backdrop-blur-xl border-b border-white/5">
         <div className="container max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
@@ -20,17 +16,10 @@ const Index = () => {
             <span className="font-semibold text-pulse-100">Pulsato</span>
           </div>
           <div className="flex items-center gap-4">
-            <Button 
-              variant="ghost" 
-              className="text-pulse-100 hover:text-white hover:bg-white/5 transition-all"
-              onClick={handleLogin}
-            >
+            <Button variant="ghost" className="text-pulse-100 hover:text-white hover:bg-white/5 transition-all" onClick={handleLogin}>
               Login
             </Button>
-            <Button 
-              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 transition-all duration-300 text-white border-0 shadow-lg shadow-purple-500/25"
-              onClick={handleSignup}
-            >
+            <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 transition-all duration-300 text-white border-0 shadow-lg shadow-purple-500/25" onClick={handleSignup}>
               Get Started
             </Button>
           </div>
@@ -42,20 +31,16 @@ const Index = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-purple-500/5 to-transparent" />
         <div className="absolute inset-0 bg-[url('/lovable-uploads/2efe3633-fad8-4edf-b731-9a87f0fd1edf.png')] opacity-5 bg-cover bg-center mix-blend-overlay" />
         <div className="container max-w-7xl mx-auto space-y-8 text-center relative animate-fade-in">
-          <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text leading-tight max-w-4xl mx-auto">
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text leading-tight max-w-4xl mx-auto md:text-5xl">
             Employee pulse surveys suck.
           </h1>
           <div className="space-y-4 text-xl md:text-2xl max-w-2xl mx-auto">
-            <p className="text-pulse-300">Self-rating your wellbeing from 0 to 10...</p>
+            <p className="text-pulse-300">Self-rating your wellbeing from 0 to 10 is like reading one sentence of a book:</p>
             <p className="text-pulse-300">...is like reading one sentence of a book.</p>
             <p className="font-semibold text-pulse-100">You miss the story & emotions.</p>
           </div>
           <div className="pt-8">
-            <Button 
-              size="lg"
-              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 transition-all duration-300 text-white gap-2 text-lg border-0 shadow-lg shadow-purple-500/25"
-              onClick={handleSignup}
-            >
+            <Button size="lg" className="bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 transition-all duration-300 text-white gap-2 text-lg border-0 shadow-lg shadow-purple-500/25" onClick={handleSignup}>
               Transform your employee wellbeing
               <ArrowRight className="h-5 w-5" />
             </Button>
@@ -80,14 +65,9 @@ const Index = () => {
 
           {/* Categories Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
-            {Object.values(WELLBEING_TOPICS).map((topic, index) => (
-              <Card 
-                key={topic.id} 
-                className="p-6 bg-gradient-to-br from-white/10 to-white/5 hover:from-white/15 hover:to-white/10 backdrop-blur-lg border-white/10 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/5"
-              >
+            {Object.values(WELLBEING_TOPICS).map((topic, index) => <Card key={topic.id} className="p-6 bg-gradient-to-br from-white/10 to-white/5 hover:from-white/15 hover:to-white/10 backdrop-blur-lg border-white/10 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/5">
                 <p className="text-sm font-medium text-pulse-100">{topic.title}</p>
-              </Card>
-            ))}
+              </Card>)}
           </div>
         </div>
       </section>
@@ -117,20 +97,11 @@ const Index = () => {
           </h2>
           <p className="text-xl text-pulse-300">No setup. No payment. Instant results.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              size="lg"
-              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 transition-all duration-300 text-white gap-2 text-lg border-0 shadow-lg shadow-purple-500/25"
-              onClick={handleSignup}
-            >
+            <Button size="lg" className="bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 transition-all duration-300 text-white gap-2 text-lg border-0 shadow-lg shadow-purple-500/25" onClick={handleSignup}>
               Signup for free
               <ArrowRight className="h-5 w-5" />
             </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-purple-500/50 text-pulse-100 hover:bg-purple-500/10 transition-all duration-300 text-lg"
-              onClick={handleLogin}
-            >
+            <Button size="lg" variant="outline" className="border-purple-500/50 text-pulse-100 hover:bg-purple-500/10 transition-all duration-300 text-lg" onClick={handleLogin}>
               Login
             </Button>
           </div>
@@ -161,8 +132,6 @@ const Index = () => {
           </div>
         </div>
       </section>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
