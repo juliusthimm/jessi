@@ -24,13 +24,23 @@ interface TeamMember {
 
 interface TeamMembersListProps {
   members: TeamMember[];
+  currentUserRole?: CompanyRole;
 }
 
-export const TeamMembersList = ({ members }: TeamMembersListProps) => {
+export const TeamMembersList = ({ members, currentUserRole }: TeamMembersListProps) => {
   const [updatingMemberId, setUpdatingMemberId] = useState<string | null>(null);
   const { toast } = useToast();
 
   const handleRoleChange = async (memberId: string, newRole: CompanyRole) => {
+    if (currentUserRole !== 'admin') {
+      toast({
+        title: "Unauthorized",
+        description: "Only admins can manage roles",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setUpdatingMemberId(memberId);
     try {
       const { error } = await supabase
@@ -76,7 +86,7 @@ export const TeamMembersList = ({ members }: TeamMembersListProps) => {
               <p className="font-medium">{member.profiles?.username || 'Anonymous User'}</p>
               <p className="text-sm text-pulse-300">{member.role}</p>
             </div>
-            {member.role !== 'admin' && (
+            {member.role !== 'admin' && currentUserRole === 'admin' && (
               <Select
                 defaultValue={member.role}
                 onValueChange={(value: CompanyRole) => handleRoleChange(member.id, value)}

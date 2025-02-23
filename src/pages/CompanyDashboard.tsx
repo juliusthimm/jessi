@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -6,11 +7,12 @@ import { useToast } from "@/hooks/use-toast";
 import { Briefcase } from "lucide-react";
 import { TeamMembersList } from "@/components/company/TeamMembersList";
 import { InviteMembers } from "@/components/company/InviteMembers";
+import { CompanyRole } from "@/types/auth";
 
 interface CompanyMember {
   id: string;
   user_id: string;
-  role: 'admin' | 'hr' | 'employee';
+  role: CompanyRole;
   profiles: {
     username?: string;
   } | null;
@@ -20,6 +22,7 @@ interface Company {
   id: string;
   name: string;
   members: CompanyMember[];
+  currentUserRole?: CompanyRole;
 }
 
 const CompanyDashboard = () => {
@@ -86,6 +89,7 @@ const CompanyDashboard = () => {
         id: companyData.company.id,
         name: companyData.company.name,
         members: members || [],
+        currentUserRole: companyData.role,
       });
     } catch (error) {
       toast({
@@ -132,7 +136,7 @@ const CompanyDashboard = () => {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
-        <TeamMembersList members={company.members} />
+        <TeamMembersList members={company.members} currentUserRole={company.currentUserRole} />
         <InviteMembers companyId={company.id} companyName={company.name} />
       </div>
     </div>
