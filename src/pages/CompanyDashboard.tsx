@@ -109,7 +109,7 @@ const CompanyDashboard = () => {
             
             {company.name}
           </h1>
-          <p className="text-pulse-300 mt-2">Company settings</p>
+          
         </div>
         {company.currentUserRole === 'hr' && <Button onClick={() => navigate('/hr-reports')} className="flex items-center gap-2">
             <LineChart className="h-4 w-4" />
