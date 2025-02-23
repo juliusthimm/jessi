@@ -70,7 +70,7 @@ const Home = () => {
         }
 
         // If admin, fetch total company chats and last company assessment
-        if (member?.role === 'admin' && member?.company_id) {
+        if ((member?.role === 'admin' || member?.role === 'hr') && member?.company_id) {
           const { count } = await supabase
             .from('conversation_analyses')
             .select('*', { count: 'exact', head: true })
