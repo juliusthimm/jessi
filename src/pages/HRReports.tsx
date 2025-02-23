@@ -36,13 +36,15 @@ const HRReports = () => {
   useEffect(() => {
     const fetchAnalyses = async () => {
       try {
-        console.log("Fetching user company...");
+        console.log("Fetching user profile...");
+        // Changed from .single() to .maybeSingle()
         const { data: userCompany, error: profileError } = await supabase
           .from('profiles')
           .select('company_id')
-          .single();
+          .eq('id', (await supabase.auth.getUser()).data.user?.id)
+          .maybeSingle();
 
-        console.log("User company result:", { userCompany, profileError });
+        console.log("User profile result:", { userCompany, profileError });
 
         if (profileError) {
           console.error("Profile error:", profileError);
