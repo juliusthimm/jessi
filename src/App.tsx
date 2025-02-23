@@ -9,6 +9,7 @@ import NotFound from "@/pages/NotFound";
 import { Toaster } from "@/components/ui/toaster";
 import { useEffect, useState } from "react";
 import { supabase } from "./integrations/supabase/client";
+import { MainLayout } from "@/components/layouts/MainLayout";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
@@ -26,27 +27,24 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          path="/"
-          element={isAuthenticated ? <Index /> : <Navigate to="/auth" />}
-        />
+        {/* Auth page doesn't use MainLayout since it has its own layout */}
         <Route
           path="/auth"
           element={!isAuthenticated ? <Auth /> : <Navigate to="/" />}
         />
-        <Route
-          path="/analysis/:conversationId"
-          element={isAuthenticated ? <Analysis /> : <Navigate to="/auth" />}
-        />
-        <Route
-          path="/company"
-          element={isAuthenticated ? <CompanyDashboard /> : <Navigate to="/auth" />}
-        />
-        <Route
-          path="/company-onboarding"
-          element={isAuthenticated ? <CompanyOnboarding /> : <Navigate to="/auth" />}
-        />
-        <Route path="*" element={<NotFound />} />
+        
+        {/* Protected routes with MainLayout */}
+        <Route element={isAuthenticated ? <MainLayout /> : <Navigate to="/auth" />}>
+          <Route path="/" element={<Index />} />
+          <Route path="/analysis/:conversationId" element={<Analysis />} />
+          <Route path="/company" element={<CompanyDashboard />} />
+          <Route path="/company-onboarding" element={<CompanyOnboarding />} />
+        </Route>
+
+        {/* 404 page with MainLayout */}
+        <Route element={<MainLayout />}>
+          <Route path="*" element={<NotFound />} />
+        </Route>
       </Routes>
       <Toaster />
     </BrowserRouter>

@@ -1,11 +1,9 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Briefcase } from "lucide-react";
-import { Footer } from "@/components/Footer";
 import { TeamMembersList } from "@/components/company/TeamMembersList";
 import { InviteMembers } from "@/components/company/InviteMembers";
 
@@ -102,7 +100,7 @@ const CompanyDashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-pulse-800 text-pulse-100 flex items-center justify-center">
+      <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin">Loading...</div>
       </div>
     );
@@ -110,7 +108,7 @@ const CompanyDashboard = () => {
 
   if (!company) {
     return (
-      <div className="min-h-screen bg-pulse-800 text-pulse-100 flex items-center justify-center">
+      <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-4">No Company Found</h1>
           <Button onClick={() => navigate('/')}>Return Home</Button>
@@ -120,24 +118,21 @@ const CompanyDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-pulse-800 text-pulse-100">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold flex items-center gap-2">
-              <Briefcase className="h-8 w-8" />
-              {company.name}
-            </h1>
-            <p className="text-pulse-300 mt-2">Company Management Dashboard</p>
-          </div>
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-2">
-          <TeamMembersList members={company.members} />
-          <InviteMembers companyId={company.id} companyName={company.name} />
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h1 className="text-3xl font-bold flex items-center gap-2">
+            <Briefcase className="h-8 w-8" />
+            {company.name}
+          </h1>
+          <p className="text-pulse-300 mt-2">Company Management Dashboard</p>
         </div>
       </div>
-      <Footer />
+
+      <div className="grid gap-6 md:grid-cols-2">
+        <TeamMembersList members={company.members} />
+        <InviteMembers companyId={company.id} companyName={company.name} />
+      </div>
     </div>
   );
 };
