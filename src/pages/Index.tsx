@@ -56,7 +56,7 @@ const Index = () => {
           </div>
         </div>
         <div className="w-screen relative left-[50%] right-[50%] -mx-[50vw] -mt-[10%]">
-            <img alt="Pulsato Logo" className="w-full" src="/lovable-uploads/2a779960-94e6-43a0-8e95-1846e5b71027.png" />
+            <img alt="Pulsato Logo" className="w-full" src="/lovable-uploads/af6ce922-36ab-4bb9-8bfd-d437800545ac.png" />
         </div>
       </section>
 
