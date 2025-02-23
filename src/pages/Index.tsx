@@ -12,7 +12,7 @@ const Index = () => {
       <header className="fixed top-0 w-full z-50 bg-gradient-to-b from-pulse-800 via-pulse-800/95 to-pulse-800/80 backdrop-blur-xl border-b border-white/5">
         <div className="container max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <img src="/lovable-uploads/f5560acd-a657-4200-a4fa-4ce9590ba88a.png" alt="Pulsato Logo" className="h-6 w-6" />
+            <img src="/lovable-uploads/f5560acd-a657-4200-a4fa-4ce9590ba88a.png" alt="Pulsato Logo" className="h-14 w-14" />
             <span className="font-semibold text-pulse-100">Pulsato</span>
           </div>
           <div className="flex items-center gap-4">
