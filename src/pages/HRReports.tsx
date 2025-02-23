@@ -37,7 +37,6 @@ const HRReports = () => {
     const fetchAnalyses = async () => {
       try {
         console.log("Fetching user profile...");
-        // Changed from .single() to .maybeSingle()
         const { data: userCompany, error: profileError } = await supabase
           .from('profiles')
           .select('company_id')
@@ -136,7 +135,7 @@ const HRReports = () => {
     analyses.forEach(record => {
       if (record.analysis?.data_collection_results) {
         Object.entries(record.analysis.data_collection_results).forEach(([key, data]) => {
-          if (data?.value !== undefined) {
+          if (data?.value !== undefined && data.value !== null) {
             totals[key] = (totals[key] || 0) + data.value;
             counts[key] = (counts[key] || 0) + 1;
           }
@@ -145,36 +144,36 @@ const HRReports = () => {
     });
 
     return Object.keys(totals).reduce((acc, key) => {
-      acc[key] = totals[key] / counts[key];
+      acc[key] = counts[key] > 0 ? totals[key] / counts[key] : null;
       return acc;
-    }, {} as Record<string, number>);
+    }, {} as Record<string, number | null>);
   };
 
   const averageScores = calculateAverageScores();
 
   if (loading) {
     return (
-      <div className="container mx-auto p-8">
+      <div className="container mx-auto p-8 bg-pulse-800 text-pulse-100">
         <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-pulse-300 mx-auto"></div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto p-8 space-y-8">
+    <div className="container mx-auto p-8 space-y-8 bg-pulse-800 text-pulse-100 min-h-screen">
       <h1 className="text-3xl font-bold">Team Wellbeing Reports</h1>
 
-      <Tabs defaultValue="overview">
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="individual">Individual Reports</TabsTrigger>
+      <Tabs defaultValue="overview" className="space-y-4">
+        <TabsList className="bg-pulse-700">
+          <TabsTrigger value="overview" className="data-[state=active]:bg-pulse-600">Overview</TabsTrigger>
+          <TabsTrigger value="individual" className="data-[state=active]:bg-pulse-600">Individual Reports</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-8">
-          <Card>
+          <Card className="bg-white/5 backdrop-blur-lg border-white/10">
             <CardHeader>
-              <CardTitle>Team Overview</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-pulse-100">Team Overview</CardTitle>
+              <CardDescription className="text-pulse-300">
                 Average scores across all team members
               </CardDescription>
             </CardHeader>
@@ -185,7 +184,7 @@ const HRReports = () => {
                   <CategoryScore
                     key={topic.id}
                     title={topic.title}
-                    score={score ?? null}
+                    score={score}
                     description={topic.description}
                   />
                 );
@@ -197,10 +196,10 @@ const HRReports = () => {
         <TabsContent value="individual">
           <div className="space-y-6">
             {analyses.map((record) => (
-              <Card key={record.id}>
+              <Card key={record.id} className="bg-white/5 backdrop-blur-lg border-white/10">
                 <CardHeader>
-                  <CardTitle>{record.user_profile?.username || 'Anonymous User'}</CardTitle>
-                  <CardDescription>
+                  <CardTitle className="text-pulse-100">{record.user_profile?.username || 'Anonymous User'}</CardTitle>
+                  <CardDescription className="text-pulse-300">
                     {new Date(record.created_at).toLocaleDateString()}
                   </CardDescription>
                 </CardHeader>
