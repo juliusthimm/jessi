@@ -153,75 +153,91 @@ const HRReports = () => {
 
   if (loading) {
     return (
-      <div className="container mx-auto p-8 bg-pulse-800 text-pulse-100">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-pulse-300 mx-auto"></div>
+      <div className="min-h-screen bg-pulse-800 text-pulse-100 flex flex-col">
+        <div className="flex-1 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-pulse-300"></div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto p-8 space-y-8 bg-pulse-800 text-pulse-100 min-h-screen">
-      <h1 className="text-3xl font-bold">Team Wellbeing Reports</h1>
+    <div className="min-h-screen bg-pulse-800 text-pulse-100 flex flex-col">
+      <main className="flex-1 p-8">
+        <div className="max-w-4xl mx-auto space-y-8">
+          <h1 className="text-3xl font-bold">Team Wellbeing Reports</h1>
 
-      <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList className="bg-pulse-700">
-          <TabsTrigger value="overview" className="data-[state=active]:bg-pulse-600">Overview</TabsTrigger>
-          <TabsTrigger value="individual" className="data-[state=active]:bg-pulse-600">Individual Reports</TabsTrigger>
-        </TabsList>
+          <Tabs defaultValue="overview" className="space-y-6">
+            <TabsList className="bg-pulse-700/50 border border-white/10">
+              <TabsTrigger 
+                value="overview" 
+                className="data-[state=active]:bg-pulse-600 data-[state=active]:text-pulse-100"
+              >
+                Overview
+              </TabsTrigger>
+              <TabsTrigger 
+                value="individual" 
+                className="data-[state=active]:bg-pulse-600 data-[state=active]:text-pulse-100"
+              >
+                Individual Reports
+              </TabsTrigger>
+            </TabsList>
 
-        <TabsContent value="overview" className="space-y-8">
-          <Card className="bg-white/5 backdrop-blur-lg border-white/10">
-            <CardHeader>
-              <CardTitle className="text-pulse-100">Team Overview</CardTitle>
-              <CardDescription className="text-pulse-300">
-                Average scores across all team members
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="grid gap-6 md:grid-cols-2">
-              {Object.entries(WELLBEING_TOPICS).map(([key, topic]) => {
-                const score = averageScores[topic.id];
-                return (
-                  <CategoryScore
-                    key={topic.id}
-                    title={topic.title}
-                    score={score}
-                    description={topic.description}
-                  />
-                );
-              })}
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="individual">
-          <div className="space-y-6">
-            {analyses.map((record) => (
-              <Card key={record.id} className="bg-white/5 backdrop-blur-lg border-white/10">
-                <CardHeader>
-                  <CardTitle className="text-pulse-100">{record.user_profile?.username || 'Anonymous User'}</CardTitle>
-                  <CardDescription className="text-pulse-300">
-                    {new Date(record.created_at).toLocaleDateString()}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="grid gap-4 md:grid-cols-2">
+            <TabsContent value="overview">
+              <div className="p-6 rounded-xl bg-white/5 backdrop-blur-lg border border-white/10">
+                <h2 className="text-xl font-semibold mb-4">Team Overview</h2>
+                <div className="grid gap-4 md:grid-cols-2">
                   {Object.entries(WELLBEING_TOPICS).map(([key, topic]) => {
-                    const topicData = record.analysis?.data_collection_results?.[topic.id];
+                    const score = averageScores[topic.id];
                     return (
                       <CategoryScore
-                        key={`${record.id}-${topic.id}`}
+                        key={topic.id}
                         title={topic.title}
-                        score={topicData?.value ?? null}
+                        score={score}
                         description={topic.description}
-                        rationale={topicData?.rationale}
                       />
                     );
                   })}
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </TabsContent>
-      </Tabs>
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="individual">
+              <div className="space-y-6">
+                {analyses.map((record) => (
+                  <div 
+                    key={record.id} 
+                    className="p-6 rounded-xl bg-white/5 backdrop-blur-lg border border-white/10"
+                  >
+                    <div className="mb-6">
+                      <h3 className="text-xl font-semibold text-pulse-100">
+                        {record.user_profile?.username || 'Anonymous User'}
+                      </h3>
+                      <p className="text-pulse-300">
+                        {new Date(record.created_at).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <div className="grid gap-4 md:grid-cols-2">
+                      {Object.entries(WELLBEING_TOPICS).map(([key, topic]) => {
+                        const topicData = record.analysis?.data_collection_results?.[topic.id];
+                        return (
+                          <CategoryScore
+                            key={`${record.id}-${topic.id}`}
+                            title={topic.title}
+                            score={topicData?.value ?? null}
+                            description={topic.description}
+                            rationale={topicData?.rationale}
+                          />
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </main>
     </div>
   );
 };
