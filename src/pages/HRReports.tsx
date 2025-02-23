@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -35,17 +36,34 @@ const HRReports = () => {
   useEffect(() => {
     const fetchAnalyses = async () => {
       try {
-        const { data: userCompany } = await supabase
+        console.log("Fetching user company...");
+        const { data: userCompany, error: profileError } = await supabase
           .from('profiles')
           .select('company_id')
           .single();
 
+        console.log("User company result:", { userCompany, profileError });
+
+        if (profileError) {
+          console.error("Profile error:", profileError);
+          throw profileError;
+        }
+
         if (!userCompany?.company_id) {
+          console.error("No company ID found");
           throw new Error('No company found');
         }
 
-        const { data: hasAccess } = await supabase
+        console.log("Checking HR access for company:", userCompany.company_id);
+        const { data: hasAccess, error: accessError } = await supabase
           .rpc('has_hr_access', { company_id: userCompany.company_id });
+
+        console.log("HR access check result:", { hasAccess, accessError });
+
+        if (accessError) {
+          console.error("Access check error:", accessError);
+          throw accessError;
+        }
 
         if (!hasAccess) {
           toast({
@@ -57,7 +75,8 @@ const HRReports = () => {
           return;
         }
 
-        const { data: analysesData, error } = await supabase
+        console.log("Fetching analyses...");
+        const { data: analysesData, error: analysesError } = await supabase
           .from('conversation_analyses')
           .select(`
             id,
@@ -71,7 +90,12 @@ const HRReports = () => {
           .eq('status', 'done')
           .order('created_at', { ascending: false });
 
-        if (error) throw error;
+        console.log("Analyses result:", { analysesData, analysesError });
+
+        if (analysesError) {
+          console.error("Analyses error:", analysesError);
+          throw analysesError;
+        }
         
         const typedData: AnalysisRecord[] = (analysesData || []).map(record => {
           const userProfile = record.user_profile as unknown as { username: string | null }[];
@@ -87,6 +111,7 @@ const HRReports = () => {
         
         setAnalyses(typedData);
       } catch (error) {
+        console.error("Overall error:", error);
         toast({
           title: "Error",
           description: "Failed to load reports",
