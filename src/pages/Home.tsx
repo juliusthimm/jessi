@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChatInterface } from "@/components/ChatInterface";
@@ -58,12 +57,7 @@ const Home = () => {
           const date = new Date(lastAssessment.created_at);
           const daysDifference = differenceInDays(new Date(), date);
           if (daysDifference <= 7) {
-            setLastAssessmentDate(formatDistanceToNow(date, { 
-              addSuffix: true,
-              includeSeconds: false,
-              addSuffix: true,
-              roundingMethod: 'floor'
-            }));
+            setLastAssessmentDate(formatDistanceToNow(date, { addSuffix: true }));
           } else {
             setLastAssessmentDate(format(date, 'MMMM do, yyyy'));
           }
