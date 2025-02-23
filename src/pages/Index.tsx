@@ -5,7 +5,6 @@ import { WELLBEING_TOPICS } from "@/constants/wellbeing-topics";
 import { ArrowRight } from "lucide-react";
 import WebFont from 'webfontloader';
 import { useEffect } from "react";
-
 const Index = () => {
   useEffect(() => {
     WebFont.load({
@@ -13,8 +12,7 @@ const Index = () => {
         families: ['Instrument Serif']
       }
     });
-   }, []);
-   
+  }, []);
   const navigate = useNavigate();
   const handleLogin = () => navigate("/auth");
   const handleSignup = () => navigate("/auth?tab=signup");
@@ -40,7 +38,9 @@ const Index = () => {
       {/* Hero Section */}
       <section className="min-h-screen pt-32 flex-column items-center justify-center px-4 relative overflow-hidden">
         <div className="container max-w-2xl mx-auto space-y-8 text-center relative animate-fade-in">
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text leading-tight max-w-4xl mx-auto md:text-5xl text-left" style={{fontFamily: 'Instrument Serif'}}>
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text leading-tight max-w-4xl mx-auto md:text-5xl text-left" style={{
+          fontFamily: 'Instrument Serif'
+        }}>
             Employee pulse surveys suck.
           </h1>
           <div className="space-y-4 text-xl md:text-2xl max-w-2xl mx-auto">
@@ -56,7 +56,7 @@ const Index = () => {
           </div>
         </div>
         <div className="w-screen relative left-[50%] right-[50%] -mx-[50vw] -mt-[10%]">
-            <img src="/lovable-uploads/wave.png" alt="Pulsato Logo" className="w-full" />
+            <img alt="Pulsato Logo" className="w-full" src="/lovable-uploads/2a779960-94e6-43a0-8e95-1846e5b71027.png" />
         </div>
       </section>
 
@@ -66,12 +66,19 @@ const Index = () => {
         <div className="container max-w-2xl mx-auto space-y-16 relative">
           <div className="text-center space-y-6">
             <div className="flex gap-10">
-              <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text text-left" style={{fontFamily: 'Instrument Serif'}}>
-                Meet <span className="underline decoration-purple-400">Maya</span>, the best friend <br/> of modern people teams.
+              <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text text-left" style={{
+              fontFamily: 'Instrument Serif'
+            }}>
+                Meet <span className="underline decoration-purple-400">Maya</span>, the best friend <br /> of modern people teams.
               </h2>
               <div className="flex items-center gap-10">
-                <div className="rounded-full p-2 border border-white/40" style={{borderWidth: "1px"}}>
-                  <img src="/lovable-uploads/logo.png" alt="Pulsato Logo" style={{height: '5rem', width: '5rem'}} />
+                <div className="rounded-full p-2 border border-white/40" style={{
+                borderWidth: "1px"
+              }}>
+                  <img src="/lovable-uploads/logo.png" alt="Pulsato Logo" style={{
+                  height: '5rem',
+                  width: '5rem'
+                }} />
                 </div>
               </div>
             </div>
@@ -83,21 +90,18 @@ const Index = () => {
           </div>
           {/* Categories Grid */}
           <div className="overflow-x-auto pb-4">
-            <div className="flex gap-4" style={{ minWidth: 'max-content' }}>
-              {Object.values(WELLBEING_TOPICS).map((topic, index) => 
-                <Card 
-                  key={topic.id} 
-                  className="p-6 glass-card bg-gradient-to-br from-white/10 to-white/5 
+            <div className="flex gap-4" style={{
+            minWidth: 'max-content'
+          }}>
+              {Object.values(WELLBEING_TOPICS).map((topic, index) => <Card key={topic.id} className="p-6 glass-card bg-gradient-to-br from-white/10 to-white/5 
                     hover:from-white/20 hover:to-white/10
                     transition-all duration-500 ease-in-out
                     hover:scale-105 hover:shadow-xl hover:shadow-purple-500/20
                     cursor-pointer group
                     min-w-[200px]
-                    min-h-[200px]"
-                >
+                    min-h-[200px]">
                   <p className="text-base font-medium text-pulse-100 group-hover:text-white transition-colors truncate">{topic.title}</p>
-                </Card>
-              )}
+                </Card>)}
             </div>
           </div>
         </div>
@@ -107,7 +111,9 @@ const Index = () => {
       <section className="py-32 px-4 bg-gradient-to-b from-pulse-700/20 to-transparent relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('/lovable-uploads/a5e9f09a-e485-46be-818d-ed43ce51f6e3.png')] opacity-5 bg-cover bg-center mix-blend-overlay" />
         <div className="container max-w-2xl mx-auto space-y-8 text-center relative">
-          <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text text-left" style={{fontFamily: 'Instrument Serif'}}>
+          <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text text-left" style={{
+          fontFamily: 'Instrument Serif'
+        }}>
             See how it works.
           </h2>
           <p className="text-xl text-pulse-300 text-left">It's easier than you think.</p>
@@ -123,7 +129,9 @@ const Index = () => {
       {/* About Section */}
       <section className="py-32 px-4 bg-gradient-to-b from-pulse-700/20 to-transparent">
         <div className="container max-w-2xl mx-auto text-center space-y-12 ">
-          <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text text-left" style={{fontFamily: 'Instrument Serif'}}>
+          <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text text-left" style={{
+          fontFamily: 'Instrument Serif'
+        }}>
             About us.
           </h2>
           <div className="flex flex-col sm:flex-row justify-left gap-12">
