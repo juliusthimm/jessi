@@ -111,11 +111,6 @@ const Home = () => {
                   <p className="text-lg text-pulse-300">
                     Take a quick assessment to check your wellbeing
                   </p>
-                  {lastAssessmentDate && (
-                    <p className="text-sm text-pulse-400">
-                      Last assessment {lastAssessmentDate}
-                    </p>
-                  )}
                   <Button
                     size="lg"
                     className="bg-pulse-700 hover:bg-pulse-600 text-white"
@@ -188,11 +183,16 @@ const Home = () => {
                 <div className="p-3 rounded-full bg-pulse-700/50">
                   <User className="h-6 w-6 text-pulse-300" />
                 </div>
-                <div>
+                <div className="space-y-1">
                   <h2 className="text-xl font-semibold text-pulse-100">
                     My Assessments
                   </h2>
                   <p className="text-3xl font-bold text-pulse-300">{personalChats}</p>
+                  {lastAssessmentDate && (
+                    <p className="text-sm text-pulse-400">
+                      Last assessment {lastAssessmentDate}
+                    </p>
+                  )}
                 </div>
               </div>
             </Card>
