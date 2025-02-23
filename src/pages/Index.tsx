@@ -61,7 +61,7 @@ const Index = () => {
           {!showAssessment ? <Card className="p-6 bg-white/5 backdrop-blur-lg border-white/10">
               <div className="text-center space-y-6">
                 <div className="inline-flex items-center justify-center p-3 rounded-full bg-pulse-700/50 px-[5px] py-[5px]">
-                  <img src="/lovable-uploads/f5560acd-a657-4200-a4fa-4ce9590ba88a.png" alt="Pulsato Logo" className="h-18 w-18 object-contain" />
+                  <img src="/lovable-uploads/f5560acd-a657-4200-a4fa-4ce9590ba88a.png" alt="Pulsato Logo" className="h-8 w-8" />
                 </div>
                 <h1 className="text-3xl font-bold text-pulse-100">How are you doing today?</h1>
                 <p className="text-lg text-pulse-300">Take a quick assessment to check your wellbeing</p>
