@@ -25,7 +25,7 @@ export const Header = () => {
         <div className="flex items-center gap-2" onClick={handleHome} style={{
         cursor: "pointer"
       }}>
-          <img alt="Pulsato Logo" className="h-6 w-6" src="/lovable-uploads/bdf1227e-a3b8-444a-b52c-7f987b6b07e1.png" />
+          <img alt="Pulsato Logo" src="/lovable-uploads/bdf1227e-a3b8-444a-b52c-7f987b6b07e1.png" className="h-10 w-10" />
           <span className="font-semibold text-pulse-100 text-xl">Pulsato</span>
         </div>
         <div className="flex items-center gap-4">
