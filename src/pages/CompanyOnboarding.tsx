@@ -128,9 +128,7 @@ const CompanyOnboarding = () => {
                     <Button className="w-full bg-pulse-700 hover:bg-pulse-600" onClick={() => setOnboardingState('CREATE')}>Create Company</Button>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Button className="w-full bg-pulse-700 hover:bg-pulse-600" onClick={() => setOnboardingState('JOIN')}>
-                      Join a Company
-                    </Button>
+                    <Button className="w-full bg-pulse-700 hover:bg-pulse-600" onClick={() => setOnboardingState('JOIN')}>Join Company</Button>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Button variant="outline" className="w-full text-pulse-300 hover:bg-pulse-700/50" onClick={() => navigate('/')}>
