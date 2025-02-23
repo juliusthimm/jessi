@@ -3,7 +3,18 @@ import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { WELLBEING_TOPICS } from "@/constants/wellbeing-topics";
 import { ArrowRight } from "lucide-react";
+import WebFont from 'webfontloader';
+import { useEffect } from "react";
+
 const Index = () => {
+  useEffect(() => {
+    WebFont.load({
+      google: {
+        families: ['Instrument Serif']
+      }
+    });
+   }, []);
+   
   const navigate = useNavigate();
   const handleLogin = () => navigate("/auth");
   const handleSignup = () => navigate("/auth?tab=signup");
@@ -12,62 +23,80 @@ const Index = () => {
       <header className="fixed top-0 w-full z-50 bg-gradient-to-b from-pulse-800 via-pulse-800/95 to-pulse-800/80 backdrop-blur-xl border-b border-white/5">
         <div className="container max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <img src="/lovable-uploads/f5560acd-a657-4200-a4fa-4ce9590ba88a.png" alt="Pulsato Logo" className="h-14 w-14" />
+            <img src="/lovable-uploads/logo.png" alt="Pulsato Logo" className="h-10 w-10" />
             <span className="font-semibold text-pulse-100">Pulsato</span>
           </div>
           <div className="flex items-center gap-4">
-            <Button variant="ghost" className="text-pulse-100 hover:text-white hover:bg-white/5 transition-all" onClick={handleLogin}>
+            <Button className="text-pulse-100 hover:text-white hover:bg-white/5 transition-all" onClick={handleLogin}>
               Login
             </Button>
-            <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 transition-all duration-300 text-white border-0 shadow-lg shadow-purple-500/25" onClick={handleSignup}>
-              Get Started
+            <Button variant="secondary" className="hover:opacity-90 transition-all duration-300 text-black border-0" onClick={handleSignup}>
+              Sign up
             </Button>
           </div>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="min-h-screen pt-32 flex items-center justify-center px-4 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-purple-500/5 to-transparent" />
-        <div className="absolute inset-0 bg-[url('/lovable-uploads/2efe3633-fad8-4edf-b731-9a87f0fd1edf.png')] opacity-5 bg-cover bg-center mix-blend-overlay" />
-        <div className="container max-w-7xl mx-auto space-y-8 text-center relative animate-fade-in">
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text leading-tight max-w-4xl mx-auto md:text-5xl">
+      <section className="min-h-screen pt-32 flex-column items-center justify-center px-4 relative overflow-hidden">
+        <div className="container max-w-2xl mx-auto space-y-8 text-center relative animate-fade-in">
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text leading-tight max-w-4xl mx-auto md:text-5xl text-left" style={{fontFamily: 'Instrument Serif'}}>
             Employee pulse surveys suck.
           </h1>
           <div className="space-y-4 text-xl md:text-2xl max-w-2xl mx-auto">
-            <p className="text-pulse-300 font-normal">Self-rating your wellbeing from 0 to 10 is like reading one sentence of a book:</p>
+            <p className="text-pulse-300 font-normal text-left">Self-rating your wellbeing from 0 to 10 is like reading one sentence of a book....</p>
             
-            <p className="font-semibold text-pulse-100">You miss the story & emotions.</p>
+            <p className="font-semibold text-pulse-100 mt-32 text-left">You miss the story & emotions.</p>
           </div>
-          <div className="pt-8">
+          <div className="pt-8 text-left">
             <Button size="lg" className="bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 transition-all duration-300 text-white gap-2 text-lg border-0 shadow-lg shadow-purple-500/25" onClick={handleSignup}>
               Transform your employee wellbeing
               <ArrowRight className="h-5 w-5" />
             </Button>
           </div>
         </div>
+
+        <div className="flex items-center gap-2">
+            <img src="/lovable-uploads/wave.png" alt="Pulsato Logo" />
+          </div>
       </section>
 
       {/* Maya Section */}
       <section className="py-32 px-4 relative">
         <div className="absolute inset-0 bg-gradient-to-b from-pulse-700/30 to-transparent" />
-        <div className="container max-w-7xl mx-auto space-y-16 relative">
+        <div className="container max-w-2xl mx-auto space-y-16 relative">
           <div className="text-center space-y-6">
-            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text">
-              Meet Maya, the best friend
-            </h2>
-            <p className="text-2xl text-pulse-100">of modern people teams.</p>
-            <p className="text-lg text-pulse-300 max-w-2xl mx-auto">
+            <div className="flex gap-10">
+              <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text text-left" style={{fontFamily: 'Instrument Serif'}}>
+                Meet <span className="underline decoration-purple-400">Maya</span>, the best friend <br/> of modern people teams.
+              </h2>
+              <div className="flex items-center gap-10">
+                <div className="rounded-full p-2 border border-white/40" style={{borderWidth: "1px"}}>
+                  <img src="/lovable-uploads/logo.png" alt="Pulsato Logo" style={{height: '5rem', width: '5rem'}} />
+                </div>
+              </div>
+            </div>
+
+            <p className="text-lg text-pulse-300 max-w-2xl mx-auto text-left">
               Maya chats with your employees & creates anonymized wellbeing
               insights for your people team across seven key categories.
             </p>
           </div>
 
           {/* Categories Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
-            {Object.values(WELLBEING_TOPICS).map((topic, index) => <Card key={topic.id} className="p-6 bg-gradient-to-br from-white/10 to-white/5 hover:from-white/15 hover:to-white/10 backdrop-blur-lg border-white/10 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/5">
-                <p className="text-sm font-medium text-pulse-100">{topic.title}</p>
-              </Card>)}
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-6">
+            {Object.values(WELLBEING_TOPICS).map((topic, index) => 
+              <Card 
+                key={topic.id} 
+                className="p-6 glass-card bg-gradient-to-br from-white/10 to-white/5 
+                  hover:from-white/20 hover:to-white/10
+                  transition-all duration-500 ease-in-out
+                  hover:scale-105 hover:shadow-xl hover:shadow-purple-500/20
+                  cursor-pointer group"
+              >
+                <p className="text-sm font-medium text-pulse-100 group-hover:text-white transition-colors">{topic.title}</p>
+              </Card>
+            )}
           </div>
         </div>
       </section>
@@ -75,11 +104,11 @@ const Index = () => {
       {/* Video Section */}
       <section className="py-32 px-4 bg-gradient-to-b from-pulse-700/20 to-transparent relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('/lovable-uploads/a5e9f09a-e485-46be-818d-ed43ce51f6e3.png')] opacity-5 bg-cover bg-center mix-blend-overlay" />
-        <div className="container max-w-7xl mx-auto space-y-8 text-center relative">
-          <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text">
+        <div className="container max-w-2xl mx-auto space-y-8 text-center relative">
+          <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text text-left" style={{fontFamily: 'Instrument Serif'}}>
             See how it works.
           </h2>
-          <p className="text-xl text-pulse-300">It's easier than you think.</p>
+          <p className="text-xl text-pulse-300 text-left">It's easier than you think.</p>
           <div className="max-w-3xl mx-auto aspect-video bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl flex items-center justify-center hover:opacity-90 transition-all duration-300 cursor-pointer group relative overflow-hidden border border-white/10">
             <div className="absolute inset-0 bg-pulse-800/50 backdrop-blur-sm" />
             <div className="w-20 h-20 rounded-full bg-white/10 flex items-center justify-center group-hover:scale-110 transition-transform relative">
@@ -89,49 +118,75 @@ const Index = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-32 px-4">
-        <div className="container max-w-7xl mx-auto text-center space-y-8">
-          <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text">
-            Get started today.
+      {/* About Section */}
+      <section className="py-32 px-4 bg-gradient-to-b from-pulse-700/20 to-transparent">
+        <div className="container max-w-2xl mx-auto text-center space-y-12 ">
+          <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text text-left" style={{fontFamily: 'Instrument Serif'}}>
+            About us.
           </h2>
-          <p className="text-xl text-pulse-300">No setup. No payment. Instant results.</p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 transition-all duration-300 text-white gap-2 text-lg border-0 shadow-lg shadow-purple-500/25" onClick={handleSignup}>
-              Signup for free
-              <ArrowRight className="h-5 w-5" />
-            </Button>
-            <Button size="lg" variant="outline" className="border-purple-500/50 text-pulse-100 hover:bg-purple-500/10 transition-all duration-300 text-lg" onClick={handleLogin}>
-              Login
-            </Button>
+          <div className="flex flex-col sm:flex-row justify-left gap-12">
+            <div className="text-center group">
+                <div className="w-40 h-40 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 mx-auto mb-6 backdrop-blur-xl border border-white/10 transition-transform group-hover:scale-105 relative overflow-hidden">
+                  <div className="absolute inset-0 bg-pulse-800/50" />
+                </div>
+                <p className="text-lg text-pulse-100 font-medium">Julius T.</p>
+                <p className="text-sm text-pulse-300">Founder & CEO</p>
+            </div>
+            <div className="text-center group">
+              <div className="w-40 h-40 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 mx-auto mb-6 backdrop-blur-xl border border-white/10 transition-transform group-hover:scale-105 relative overflow-hidden">
+                <img src="/lovable-uploads/anshul.jpeg" alt="Anshul M." className="absolute inset-0 w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-pulse-800/50" />
+              </div>
+              <p className="text-lg text-pulse-100 font-medium">Anshul M.</p>
+              <p className="text-sm text-pulse-300">Founder & CTO</p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* About Section */}
-      <section className="py-32 px-4 bg-gradient-to-b from-pulse-700/20 to-transparent">
-        <div className="container max-w-7xl mx-auto text-center space-y-12">
-          <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text">
-            About us.
-          </h2>
-          <div className="flex flex-col sm:flex-row justify-center gap-12">
-            <div className="text-center group">
-              <div className="w-40 h-40 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 mx-auto mb-6 backdrop-blur-xl border border-white/10 transition-transform group-hover:scale-105 relative overflow-hidden">
-                <div className="absolute inset-0 bg-pulse-800/50" />
+      {/* Footer */}
+      <footer className="py-12 px-4 border-t border-white/10">
+        <div className="container max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                <img src="/lovable-uploads/logo.png" alt="Pulsato Logo" className="h-8 w-8" />
+                <span className="font-semibold text-pulse-100">Pulsato</span>
               </div>
-              <p className="text-lg text-pulse-100 font-medium">Anshul M.</p>
-              <p className="text-sm text-pulse-300">Founder & CEO</p>
+              <p className="text-sm text-pulse-300">
+                Transforming employee wellbeing through meaningful conversations.
+              </p>
             </div>
-            <div className="text-center group">
-              <div className="w-40 h-40 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 mx-auto mb-6 backdrop-blur-xl border border-white/10 transition-transform group-hover:scale-105 relative overflow-hidden">
-                <div className="absolute inset-0 bg-pulse-800/50" />
-              </div>
-              <p className="text-lg text-pulse-100 font-medium">Julius T.</p>
-              <p className="text-sm text-pulse-300">Co-Founder & CTO</p>
+            <div>
+              <h3 className="font-semibold mb-4">Product</h3>
+              <ul className="space-y-2 text-sm text-pulse-300">
+                <li><a href="#" className="hover:text-white transition-colors">Features</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Pricing</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Case Studies</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-4">Company</h3>
+              <ul className="space-y-2 text-sm text-pulse-300">
+                <li><a href="#" className="hover:text-white transition-colors">About</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Careers</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-4">Legal</h3>
+              <ul className="space-y-2 text-sm text-pulse-300">
+                <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Cookie Policy</a></li>
+              </ul>
             </div>
           </div>
+          <div className="mt-12 pt-8 border-t border-white/10 text-sm text-pulse-300 text-center">
+            <p>&copy; {new Date().getFullYear()} Pulsato. All rights reserved.</p>
+          </div>
         </div>
-      </section>
+      </footer>
     </div>;
 };
 export default Index;
