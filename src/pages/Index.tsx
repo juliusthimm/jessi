@@ -22,7 +22,7 @@ const Index = () => {
       <div className="container max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <img src="/lovable-uploads/logo.png" alt="Pulsato Logo" className="h-10 w-10" />
-          <span className="font-semibold text-pulse-100">Pulsato</span>
+          <span className="font-semibold text-pulse-100 text-xl">Pulsato</span>
         </div>
         <div className="flex items-center gap-4">
           <Button className="text-pulse-100 hover:text-white hover:bg-white/5 transition-all" onClick={handleLogin}>
