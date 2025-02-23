@@ -5,20 +5,17 @@ import { WELLBEING_TOPICS } from "@/constants/wellbeing-topics";
 import { ArrowRight } from "lucide-react";
 import WebFont from 'webfontloader';
 import { useEffect } from "react";
-
 const Index = () => {
   useEffect(() => {
     WebFont.load({
       google: {
-        families: ['Roboto Serif:wght@400']
+        families: ['Instrument Serif']
       }
     });
   }, []);
-  
   const navigate = useNavigate();
   const handleLogin = () => navigate("/auth");
   const handleSignup = () => navigate("/auth?tab=signup");
-  
   return <div className="min-h-screen bg-pulse-800 text-pulse-100">
     {/* Header */}
     <header className="fixed top-0 w-full z-50 bg-gradient-to-b from-pulse-800 via-pulse-800/95 to-pulse-800/80 backdrop-blur-xl border-b border-white/5">
@@ -41,24 +38,25 @@ const Index = () => {
     {/* Hero Section */}
     <section className="min-h-screen pt-32 flex-column items-center justify-center px-4 relative overflow-hidden">
       <div className="container max-w-2xl mx-auto space-y-8 text-center relative animate-fade-in my-0 py-[90px]">
-        <h1 style={{
-          fontFamily: 'Roboto Serif',
-          fontStretch: 'condensed'
-        }} className="text-5xl text-[#AA8BFF] leading-tight max-w-4xl mx-auto text-left font-normal">
+        <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text leading-tight max-w-4xl mx-auto md:text-5xl text-left" style={{
+          fontFamily: 'Instrument Serif'
+        }}>
           Employee pulse surveys suck.
         </h1>
         <div className="space-y-4 text-xl md:text-2xl max-w-2xl mx-auto">
           <p className="text-pulse-300 font-normal text-left">Self-submission surveys to measure employee wellbeing is like trying to capture the full story of a book in one sentence.</p>
+          
+          
         </div>
         <div className="pt-8 text-left">
-          <Button size="lg" className="bg-[#AA8BFF] hover:opacity-90 transition-all duration-300 text-white gap-2 text-lg border-0 shadow-lg shadow-[#AA8BFF]/25" onClick={handleSignup}>
+          <Button size="lg" className="bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 transition-all duration-300 text-white gap-2 text-lg border-0 shadow-lg shadow-purple-500/25" onClick={handleSignup}>
             Transform your employee wellbeing
             <ArrowRight className="h-5 w-5" />
           </Button>
         </div>
       </div>
       <div className="w-screen relative left-[50%] right-[50%] -mx-[50vw] -mt-[10%]">
-        <img alt="Pulsato Logo" className="w-full" src="/lovable-uploads/5a592ba9-bd0a-4a67-9ac2-260cae1a57ea.png" />
+        <img alt="Pulsato Logo" className="w-full" src="/lovable-uploads/af6ce922-36ab-4bb9-8bfd-d437800545ac.png" />
       </div>
     </section>
 
@@ -205,5 +203,4 @@ const Index = () => {
     </footer>
   </div>;
 };
-
 export default Index;
