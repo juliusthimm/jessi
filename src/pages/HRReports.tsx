@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -13,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
 import type { ConversationResponse } from "@/types/elevenlabs";
 
 interface AnalysisRecord {
@@ -30,6 +30,7 @@ const HRReports = () => {
   const [analyses, setAnalyses] = useState<AnalysisRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAnalyses = async () => {
@@ -41,6 +42,19 @@ const HRReports = () => {
 
         if (!userCompany?.company_id) {
           throw new Error('No company found');
+        }
+
+        const { data: hasAccess } = await supabase
+          .rpc('has_hr_access', { company_id: userCompany.company_id });
+
+        if (!hasAccess) {
+          toast({
+            title: "Unauthorized",
+            description: "You don't have permission to view HR reports",
+            variant: "destructive",
+          });
+          navigate('/');
+          return;
         }
 
         const { data: analysesData, error } = await supabase
@@ -59,7 +73,6 @@ const HRReports = () => {
 
         if (error) throw error;
         
-        // Transform the data to match the AnalysisRecord type
         const typedData: AnalysisRecord[] = (analysesData || []).map(record => {
           const userProfile = record.user_profile as unknown as { username: string | null }[];
           return {
@@ -85,7 +98,7 @@ const HRReports = () => {
     };
 
     fetchAnalyses();
-  }, [toast]);
+  }, [toast, navigate]);
 
   const calculateAverageScores = () => {
     if (!analyses.length) return {};
