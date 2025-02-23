@@ -50,6 +50,9 @@ const Auth = () => {
           password,
           options: {
             emailRedirectTo: window.location.origin,
+            data: {
+              mode: mode,
+            },
           },
         });
 
@@ -69,8 +72,10 @@ const Auth = () => {
           // After successful signup, update the user's profile with their selected mode
           const { error: profileError } = await supabase
             .from('profiles')
-            .update({ mode })
-            .eq('id', data.user.id);
+            .upsert({
+              id: data.user.id,
+              mode: mode,
+            });
 
           if (profileError) {
             toast({
@@ -134,7 +139,7 @@ const Auth = () => {
         title: "Company created",
         description: "Your company has been created successfully",
       });
-      navigate("/");
+      navigate("/company");
     } catch (error) {
       toast({
         title: "Error",
@@ -227,17 +232,18 @@ const Auth = () => {
                 <div className="space-y-2">
                   <Button
                     className="w-full bg-pulse-700 hover:bg-pulse-600"
-                    onClick={() => handleAuth("LOGIN")}
+                    onClick={() => handleAuth(authState === 'LOGIN' ? 'LOGIN' : 'SIGNUP')}
                     disabled={loading}
                   >
-                    {loading ? "Processing..." : "Sign In"}
+                    {loading ? "Processing..." : (authState === 'LOGIN' ? "Sign In" : "Create Account")}
                   </Button>
                   <Button
+                    variant="ghost"
                     className="w-full hover:bg-pulse-700"
-                    onClick={() => handleAuth("SIGNUP")}
+                    onClick={() => setAuthState(authState === 'LOGIN' ? 'SIGNUP' : 'LOGIN')}
                     disabled={loading}
                   >
-                    Create Account
+                    {authState === 'LOGIN' ? "Create Account" : "Sign In Instead"}
                   </Button>
                 </div>
               </>
