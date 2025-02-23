@@ -52,16 +52,6 @@ const CompanyOnboarding = () => {
         throw new Error(memberError.message);
       }
 
-      // Update user profile to set company mode
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .update({ mode: 'company' })
-        .eq('id', user.user.id);
-
-      if (profileError) {
-        throw new Error(profileError.message);
-      }
-
       toast({
         title: "Company created",
         description: "Your company has been created successfully",
@@ -112,16 +102,6 @@ const CompanyOnboarding = () => {
 
       if (memberError) {
         throw new Error(memberError.message);
-      }
-
-      // Update user profile to set company mode
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .update({ mode: 'company' })
-        .eq('id', user.id);
-
-      if (profileError) {
-        throw new Error(profileError.message);
       }
 
       toast({

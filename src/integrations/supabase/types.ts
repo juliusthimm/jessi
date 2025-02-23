@@ -169,7 +169,6 @@ export type Database = {
           avatar_url: string | null
           company_id: string | null
           id: string
-          mode: Database["public"]["Enums"]["user_mode"] | null
           updated_at: string
           username: string | null
         }
@@ -177,7 +176,6 @@ export type Database = {
           avatar_url?: string | null
           company_id?: string | null
           id: string
-          mode?: Database["public"]["Enums"]["user_mode"] | null
           updated_at?: string
           username?: string | null
         }
@@ -185,7 +183,6 @@ export type Database = {
           avatar_url?: string | null
           company_id?: string | null
           id?: string
-          mode?: Database["public"]["Enums"]["user_mode"] | null
           updated_at?: string
           username?: string | null
         }
@@ -215,7 +212,6 @@ export type Database = {
       company_role: "employee" | "hr" | "admin"
       conversation_status: "processing" | "done" | "error"
       invite_status: "pending" | "accepted" | "expired"
-      user_mode: "personal" | "company"
     }
     CompositeTypes: {
       [_ in never]: never
