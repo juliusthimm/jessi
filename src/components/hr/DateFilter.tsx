@@ -16,6 +16,7 @@ interface DateFilterProps {
 }
 
 const DATE_RANGES = {
+  "all": { label: "All time", getFn: () => null },
   "1w": { label: "Last Week", getFn: () => subWeeks(new Date(), 1) },
   "2w": { label: "Last 2 Weeks", getFn: () => subWeeks(new Date(), 2) },
   "1m": { label: "Last Month", getFn: () => subMonths(new Date(), 1) },
@@ -26,14 +27,20 @@ const DATE_RANGES = {
 
 export const DateFilter = ({ dateRange, setDateRange }: DateFilterProps) => {
   const handleRangeChange = (value: string) => {
+    if (value === 'all') {
+      setDateRange(null);
+      return;
+    }
     const now = new Date();
     const startDate = DATE_RANGES[value as keyof typeof DATE_RANGES].getFn();
-    setDateRange({ start: startDate, end: now });
+    if (startDate) {
+      setDateRange({ start: startDate, end: now });
+    }
   };
 
   return (
     <div className="flex gap-2">
-      <Select onValueChange={handleRangeChange}>
+      <Select onValueChange={handleRangeChange} defaultValue="all">
         <SelectTrigger className="w-[180px] bg-pulse-700/50 border-white/10 text-pulse-100">
           <CalendarIcon className="mr-2 h-4 w-4" />
           <SelectValue placeholder="Filter by date range" />
@@ -50,16 +57,6 @@ export const DateFilter = ({ dateRange, setDateRange }: DateFilterProps) => {
           ))}
         </SelectContent>
       </Select>
-      {dateRange && (
-        <Button
-          variant="outline"
-          className="bg-pulse-700/50 border-white/10 text-pulse-100 hover:bg-pulse-600"
-          onClick={() => setDateRange(null)}
-        >
-          <X className="h-4 w-4" />
-          Clear
-        </Button>
-      )}
     </div>
   );
 };

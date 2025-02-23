@@ -9,7 +9,6 @@ import { LoadingSpinner } from "@/components/hr/LoadingSpinner";
 import { DateFilter } from "@/components/hr/DateFilter";
 import { TeamOverview } from "@/components/hr/TeamOverview";
 import { IndividualReports } from "@/components/hr/IndividualReports";
-import { isWithinInterval } from "date-fns";
 
 interface AnalysisRecord {
   id: string;
@@ -73,7 +72,7 @@ const HRReports = () => {
         }
 
         console.log("Fetching analyses...");
-        const { data: analysesData, error: analysesError } = await supabase
+        let query = supabase
           .from('conversation_analyses')
           .select(`
             id,
@@ -86,6 +85,14 @@ const HRReports = () => {
           .eq('company_id', userCompany.company_id)
           .eq('status', 'done')
           .order('created_at', { ascending: false });
+
+        if (dateRange) {
+          query = query
+            .gte('created_at', dateRange.start.toISOString())
+            .lte('created_at', dateRange.end.toISOString());
+        }
+
+        const { data: analysesData, error: analysesError } = await query;
 
         console.log("Analyses result:", { analysesData, analysesError });
 
@@ -120,25 +127,15 @@ const HRReports = () => {
     };
 
     fetchAnalyses();
-  }, [toast, navigate]);
+  }, [toast, navigate, dateRange]);
 
   const calculateAverageScores = () => {
     if (!analyses.length) return {};
     
-    const filteredAnalyses = dateRange 
-      ? analyses.filter(record => {
-          const recordDate = new Date(record.created_at);
-          return isWithinInterval(recordDate, {
-            start: dateRange.start,
-            end: dateRange.end
-          });
-        })
-      : analyses;
-    
     const totals: Record<string, number> = {};
     const counts: Record<string, number> = {};
 
-    filteredAnalyses.forEach(record => {
+    analyses.forEach(record => {
       if (record.analysis?.data_collection_results) {
         Object.entries(record.analysis.data_collection_results).forEach(([key, data]) => {
           if (data?.value !== undefined && data.value !== null) {
@@ -156,16 +153,6 @@ const HRReports = () => {
   };
 
   const averageScores = calculateAverageScores();
-
-  const filteredAnalyses = dateRange
-    ? analyses.filter(record => {
-        const recordDate = new Date(record.created_at);
-        return isWithinInterval(recordDate, {
-          start: dateRange.start,
-          end: dateRange.end
-        });
-      })
-    : analyses;
 
   if (loading) {
     return <LoadingSpinner />;
@@ -201,7 +188,7 @@ const HRReports = () => {
             </TabsContent>
 
             <TabsContent value="individual">
-              <IndividualReports analyses={filteredAnalyses} />
+              <IndividualReports analyses={analyses} />
             </TabsContent>
           </Tabs>
         </div>
