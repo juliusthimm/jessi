@@ -1,40 +1,24 @@
-
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { WELLBEING_TOPICS } from "@/constants/wellbeing-topics";
-
 const Index = () => {
   const navigate = useNavigate();
-
   const handleLogin = () => navigate("/auth");
   const handleSignup = () => navigate("/auth?tab=signup");
-
-  return (
-    <div className="min-h-screen bg-pulse-800 text-pulse-100">
+  return <div className="min-h-screen bg-pulse-800 text-pulse-100">
       {/* Header */}
       <header className="fixed top-0 w-full z-50 bg-pulse-800/50 backdrop-blur-lg">
         <div className="container max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <img
-              src="/lovable-uploads/f5560acd-a657-4200-a4fa-4ce9590ba88a.png"
-              alt="Pulsato Logo"
-              className="h-6 w-6"
-            />
+            <img src="/lovable-uploads/f5560acd-a657-4200-a4fa-4ce9590ba88a.png" alt="Pulsato Logo" className="h-6 w-6" />
             <span className="font-semibold text-pulse-100">Pulsato</span>
           </div>
           <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              className="text-pulse-100 hover:text-white hover:bg-pulse-700"
-              onClick={handleLogin}
-            >
+            <Button variant="ghost" className="text-pulse-100 hover:text-white hover:bg-pulse-700" onClick={handleLogin}>
               Login
             </Button>
-            <Button
-              className="bg-pulse-700 hover:bg-pulse-600 text-white"
-              onClick={handleSignup}
-            >
+            <Button className="bg-pulse-700 hover:bg-pulse-600 text-white" onClick={handleSignup}>
               Signup
             </Button>
           </div>
@@ -57,11 +41,7 @@ const Index = () => {
 
       {/* Wave Illustration */}
       <div className="w-full h-32 md:h-48 relative overflow-hidden">
-        <img
-          src="/lovable-uploads/a5e9f09a-e485-46be-818d-ed43ce51f6e3.png"
-          alt="Wave Pattern"
-          className="w-full object-cover"
-        />
+        
       </div>
 
       {/* Maya Section */}
@@ -80,11 +60,9 @@ const Index = () => {
 
           {/* Categories Grid */}
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            {Object.values(WELLBEING_TOPICS).map((topic) => (
-              <Card key={topic.id} className="p-4 bg-white/5 backdrop-blur-lg border-white/10">
+            {Object.values(WELLBEING_TOPICS).map(topic => <Card key={topic.id} className="p-4 bg-white/5 backdrop-blur-lg border-white/10">
                 <p className="text-sm text-pulse-100">{topic.title}</p>
-              </Card>
-            ))}
+              </Card>)}
           </div>
         </div>
       </section>
@@ -112,19 +90,10 @@ const Index = () => {
           </h2>
           <p className="text-pulse-300">No setup. No payment. Instant results.</p>
           <div className="flex gap-4 justify-center">
-            <Button
-              size="lg"
-              className="bg-pulse-700 hover:bg-pulse-600 text-white"
-              onClick={handleSignup}
-            >
+            <Button size="lg" className="bg-pulse-700 hover:bg-pulse-600 text-white" onClick={handleSignup}>
               Signup for free
             </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-pulse-700 text-pulse-100 hover:bg-pulse-700"
-              onClick={handleLogin}
-            >
+            <Button size="lg" variant="outline" className="border-pulse-700 text-pulse-100 hover:bg-pulse-700" onClick={handleLogin}>
               Login
             </Button>
           </div>
@@ -149,8 +118,6 @@ const Index = () => {
           </div>
         </div>
       </section>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
