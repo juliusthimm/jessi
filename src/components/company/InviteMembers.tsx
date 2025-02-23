@@ -146,7 +146,7 @@ export const InviteMembers = ({ companyId, companyName }: InviteMembersProps) =>
   };
 
   return (
-    <div className="bg-pulse-700/50 rounded-lg p-6">
+    <div className="bg-white/5 backdrop-blur-lg border-white/10 rounded-lg p-6">
       <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
         <UserPlus className="h-5 w-5" />
         Invite Team Members
