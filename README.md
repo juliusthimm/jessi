@@ -1,18 +1,34 @@
-# Welcome to your Lovable project
+# Pulsato  
 
-## Project info
+Pulsato is an AI-driven voice agent that enables employees to check in on their wellbeing through natural conversations. It generates anonymized insights, allowing companies to track employee wellbeing trends while maintaining privacy.  
 
-**URL**: https://lovable.dev/projects/0c9b4261-5747-4e55-8850-b3f5bc9211bd
+## Features  
 
-## How can I edit this code?
+- AI-powered **voice conversations** that feel natural  
+- **Anonymized wellbeing reports** for employees to review before submission  
+- **HR dashboard** for tracking company-wide trends over time  
+- **Secure and privacy-first** approach using Supabase for data management  
+- Built with **Lovable**, **ElevenLabs API**, and **Mistral AI**  
 
-There are several ways of editing your application.
+## Getting Started  
 
-**Use Lovable**
+### Prerequisites  
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/0c9b4261-5747-4e55-8850-b3f5bc9211bd) and start prompting.
+Before running Pulsato, ensure you have the following installed:  
 
-Changes made via Lovable will be committed automatically to this repo.
+- **Node.js** (v18 or later)  
+- **npm** or **yarn**  
+- **Supabase account** with a configured database  
+- **ElevenLabs API key** for AI voice functionality  
+
+### Installation  
+
+Clone the repository and install dependencies:  
+
+```sh
+git clone https://github.com/juliusthimm/pulsato.git
+cd pulsato
+npm install  # or yarn install
 
 **Use your preferred IDE**
 
@@ -59,11 +75,3 @@ This project is built with .
 - React
 - shadcn-ui
 - Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/0c9b4261-5747-4e55-8850-b3f5bc9211bd) and click on Share -> Publish.
-
-## I want to use a custom domain - is that possible?
-
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
