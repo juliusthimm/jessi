@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { UserMode } from "@/types/auth";
@@ -129,29 +130,32 @@ export const SignupForm = ({ onToggleAuthState }: SignupFormProps) => {
 
       <div className="space-y-2">
         <Label htmlFor="mode">Account Type</Label>
-        <div className="flex gap-4">
-          <Button
-            type="button"
-            variant={mode === 'personal' ? 'default' : 'outline'}
-            onClick={() => setMode('personal')}
-            className={mode === 'personal' ? 'bg-pulse-600 hover:bg-pulse-500' : ''}
-          >
-            Personal
-          </Button>
-          <Button
-            type="button"
-            variant={mode === 'company' ? 'default' : 'outline'}
-            onClick={() => setMode('company')}
-            className={mode === 'company' ? 'bg-pulse-600 hover:bg-pulse-500' : ''}
-          >
-            Company
-          </Button>
-        </div>
+        <Tabs 
+          value={mode} 
+          onValueChange={(value) => setMode(value as UserMode)}
+          className="w-full"
+        >
+          <TabsList className="w-full bg-pulse-700/50 border border-white/10">
+            <TabsTrigger 
+              value="personal"
+              className="flex-1 data-[state=active]:bg-pulse-600 data-[state=active]:text-pulse-100"
+            >
+              Personal
+            </TabsTrigger>
+            <TabsTrigger 
+              value="company"
+              className="flex-1 data-[state=active]:bg-pulse-600 data-[state=active]:text-pulse-100"
+            >
+              Company
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
       </div>
 
       <div className="space-y-2 pt-4">
         <Button
-          className="w-full bg-pulse-600 hover:bg-pulse-500"
+          variant="ghost"
+          className="w-full text-pulse-300 hover:bg-pulse-700"
           onClick={handleSignup}
           disabled={loading || !email || !password || !username}
         >
@@ -159,7 +163,7 @@ export const SignupForm = ({ onToggleAuthState }: SignupFormProps) => {
         </Button>
         <Button
           variant="ghost"
-          className="w-full hover:bg-pulse-700"
+          className="w-full text-pulse-300 hover:bg-pulse-700"
           onClick={onToggleAuthState}
           disabled={loading}
         >
