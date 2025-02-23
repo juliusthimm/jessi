@@ -4,6 +4,7 @@ import Index from "@/pages/Index";
 import Auth from "@/pages/Auth";
 import Analysis from "@/pages/Analysis";
 import CompanyDashboard from "@/pages/CompanyDashboard";
+import CompanyOnboarding from "@/pages/CompanyOnboarding";
 import NotFound from "@/pages/NotFound";
 import { Toaster } from "@/components/ui/toaster";
 import { useEffect, useState } from "react";
@@ -40,6 +41,10 @@ function App() {
         <Route
           path="/company"
           element={isAuthenticated ? <CompanyDashboard /> : <Navigate to="/auth" />}
+        />
+        <Route
+          path="/company-onboarding"
+          element={isAuthenticated ? <CompanyOnboarding /> : <Navigate to="/auth" />}
         />
         <Route path="*" element={<NotFound />} />
       </Routes>
