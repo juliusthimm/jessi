@@ -9,6 +9,7 @@ import { LoadingSpinner } from "@/components/hr/LoadingSpinner";
 import { DateFilter } from "@/components/hr/DateFilter";
 import { TeamOverview } from "@/components/hr/TeamOverview";
 import { IndividualReports } from "@/components/hr/IndividualReports";
+import { isWithinInterval } from "date-fns";
 
 interface AnalysisRecord {
   id: string;
@@ -24,7 +25,7 @@ interface AnalysisRecord {
 const HRReports = () => {
   const [analyses, setAnalyses] = useState<AnalysisRecord[]>([]);
   const [loading, setLoading] = useState(true);
-  const [dateFilter, setDateFilter] = useState<Date | null>(null);
+  const [dateRange, setDateRange] = useState<{ start: Date; end: Date } | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -124,10 +125,13 @@ const HRReports = () => {
   const calculateAverageScores = () => {
     if (!analyses.length) return {};
     
-    const filteredAnalyses = dateFilter 
+    const filteredAnalyses = dateRange 
       ? analyses.filter(record => {
           const recordDate = new Date(record.created_at);
-          return recordDate.toDateString() === dateFilter.toDateString();
+          return isWithinInterval(recordDate, {
+            start: dateRange.start,
+            end: dateRange.end
+          });
         })
       : analyses;
     
@@ -153,10 +157,13 @@ const HRReports = () => {
 
   const averageScores = calculateAverageScores();
 
-  const filteredAnalyses = dateFilter
+  const filteredAnalyses = dateRange
     ? analyses.filter(record => {
         const recordDate = new Date(record.created_at);
-        return recordDate.toDateString() === dateFilter.toDateString();
+        return isWithinInterval(recordDate, {
+          start: dateRange.start,
+          end: dateRange.end
+        });
       })
     : analyses;
 
@@ -170,7 +177,7 @@ const HRReports = () => {
         <div className="max-w-4xl mx-auto space-y-8">
           <div className="flex justify-between items-center">
             <h1 className="text-3xl font-bold">Team Wellbeing Reports</h1>
-            <DateFilter dateFilter={dateFilter} setDateFilter={setDateFilter} />
+            <DateFilter dateRange={dateRange} setDateRange={setDateRange} />
           </div>
 
           <Tabs defaultValue="overview" className="space-y-6">
@@ -190,7 +197,7 @@ const HRReports = () => {
             </TabsList>
 
             <TabsContent value="overview">
-              <TeamOverview averageScores={averageScores} dateFilter={dateFilter} />
+              <TeamOverview averageScores={averageScores} dateRange={dateRange} />
             </TabsContent>
 
             <TabsContent value="individual">
