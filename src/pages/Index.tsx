@@ -142,11 +142,14 @@ const Index = () => {
           See how it works.
         </h2>
         <p className="text-xl text-pulse-300 text-left">It's easier than you think.</p>
-        <div className="max-w-3xl mx-auto aspect-video bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl flex items-center justify-center hover:opacity-90 transition-all duration-300 cursor-pointer group relative overflow-hidden border border-white/10">
-          <div className="absolute inset-0 bg-pulse-800/50 backdrop-blur-sm" />
-          <div className="w-20 h-20 rounded-full bg-white/10 flex items-center justify-center group-hover:scale-110 transition-transform relative">
-            <div className="w-0 h-0 border-t-8 border-b-8 border-l-12 border-l-white border-t-transparent border-b-transparent ml-1" />
-          </div>
+        <div className="max-w-3xl mx-auto aspect-video bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl overflow-hidden border border-white/10">
+          <iframe
+            src="https://player.vimeo.com/video/1059537339"
+            className="w-full h-full"
+            frameBorder="0"
+            allow="autoplay; fullscreen; picture-in-picture"
+            allowFullScreen
+          />
         </div>
       </div>
     </section>
