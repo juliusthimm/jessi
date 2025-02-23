@@ -13,9 +13,7 @@ const Auth = () => {
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full max-w-md space-y-8">
           <div className="text-center space-y-6">
-            <div className="inline-flex items-center justify-center p-3 rounded-full bg-pulse-700/50">
-              <HeartPulse className="h-8 w-8 text-pulse-300" />
-            </div>
+            
             <h1 className="text-3xl font-bold">Welcome to Pulsato</h1>
             <p className="text-pulse-300">Sign in or create an account to continue</p>
           </div>
