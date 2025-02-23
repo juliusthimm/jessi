@@ -89,7 +89,7 @@ export const TeamMembersList = ({ members, currentUserRole }: TeamMembersListPro
   });
 
   return (
-    <div className="glass-card p-6 max-w-3xl mx-auto w-full">
+    <div className="glass-card p-6">
       <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
         <Users className="h-5 w-5" />
         Team Members
