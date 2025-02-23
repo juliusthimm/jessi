@@ -26,7 +26,7 @@ export const Header = () => {
         cursor: "pointer"
       }}>
           <img alt="Pulsato Logo" className="h-6 w-6" src="/lovable-uploads/bdf1227e-a3b8-444a-b52c-7f987b6b07e1.png" />
-          <span className="font-semibold text-pulse-100">Pulsato</span>
+          <span className="font-semibold text-pulse-100 text-lg">Pulsato</span>
         </div>
         <div className="flex items-center gap-4">
           <Button onClick={handleNewAssessment} className="bg-pulse-700 hover:bg-pulse-600 text-white">
