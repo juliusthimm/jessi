@@ -1,7 +1,6 @@
-
 import { Button } from "@/components/ui/button";
 import { Shield, UserCheck, Users } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CompanyRole } from "@/types/auth";
 import {
   Select,
@@ -29,7 +28,18 @@ interface TeamMembersListProps {
 
 export const TeamMembersList = ({ members, currentUserRole }: TeamMembersListProps) => {
   const [updatingMemberId, setUpdatingMemberId] = useState<string | null>(null);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const { toast } = useToast();
+
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setCurrentUserId(user.id);
+      }
+    };
+    fetchCurrentUser();
+  }, []);
 
   const handleRoleChange = async (memberId: string, newRole: CompanyRole) => {
     if (currentUserRole !== 'admin') {
@@ -70,16 +80,10 @@ export const TeamMembersList = ({ members, currentUserRole }: TeamMembersListPro
     }
   };
 
-  // Get current user data
-  const getCurrentUser = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    return user?.id;
-  };
-
   // Sort members to put current user first
   const sortedMembers = [...members].sort((a, b) => {
-    if (a.user_id === getCurrentUser()) return -1;
-    if (b.user_id === getCurrentUser()) return 1;
+    if (a.user_id === currentUserId) return -1;
+    if (b.user_id === currentUserId) return 1;
     return 0;
   });
 
@@ -91,7 +95,7 @@ export const TeamMembersList = ({ members, currentUserRole }: TeamMembersListPro
       </h2>
       <div className="space-y-4">
         {sortedMembers.map((member) => {
-          const isCurrentUser = member.user_id === getCurrentUser();
+          const isCurrentUser = member.user_id === currentUserId;
           return (
             <div
               key={member.id}
