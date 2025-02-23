@@ -179,10 +179,9 @@ export const InviteMembers = ({ companyId, companyName }: InviteMembersProps) =>
                   <span className="text-sm text-pulse-100">{invite.email}</span>
                   <Button
                     size="sm"
-                    variant="ghost"
                     onClick={() => handleResend(invite.id, invite.email)}
                     disabled={resendingId === invite.id}
-                    className="hover:bg-pulse-500/50"
+                    className="bg-pulse-600 hover:bg-pulse-500"
                   >
                     <RefreshCw className={`h-4 w-4 mr-2 ${resendingId === invite.id ? 'animate-spin' : ''}`} />
                     Resend
