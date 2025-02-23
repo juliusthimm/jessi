@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChatInterface } from "@/components/ChatInterface";
@@ -8,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { CompanyRole } from "@/types/auth";
 import { AnalysisHistory } from "@/components/AnalysisHistory";
 import { Card } from "@/components/ui/card";
-import { formatDistanceToNow, format, isWithinDays } from "date-fns";
+import { formatDistanceToNow, format, differenceInDays } from "date-fns";
 
 const Home = () => {
   const [showAssessment, setShowAssessment] = useState(false);
@@ -56,7 +55,8 @@ const Home = () => {
 
         if (lastAssessment) {
           const date = new Date(lastAssessment.created_at);
-          if (isWithinDays(date, new Date(), 7)) {
+          const daysDifference = differenceInDays(new Date(), date);
+          if (daysDifference <= 7) {
             setLastAssessmentDate(formatDistanceToNow(date, { addSuffix: true }));
           } else {
             setLastAssessmentDate(format(date, 'MMMM do, yyyy'));
