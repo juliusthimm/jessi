@@ -36,7 +36,7 @@ export const LoginForm = ({ onToggleAuthState }: LoginFormProps) => {
           title: "Welcome back!",
           description: "You've successfully logged in",
         });
-        navigate("/");
+        navigate("/home");
       }
     } catch (error) {
       toast({
