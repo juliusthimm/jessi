@@ -15,6 +15,7 @@ interface PendingInvite {
   id: string;
   email: string;
   created_at: string;
+  status: 'pending' | 'accepted' | 'expired';
 }
 
 export const InviteMembers = ({ companyId, companyName }: InviteMembersProps) => {
@@ -32,8 +33,9 @@ export const InviteMembers = ({ companyId, companyName }: InviteMembersProps) =>
     try {
       const { data, error } = await supabase
         .from('company_invites')
-        .select('id, email, created_at')
+        .select('id, email, created_at, status')
         .eq('company_id', companyId)
+        .eq('status', 'pending')
         .gte('expires_at', new Date().toISOString());
 
       if (error) throw error;
@@ -58,6 +60,7 @@ export const InviteMembers = ({ companyId, companyName }: InviteMembersProps) =>
           email: inviteEmail,
           token: inviteToken,
           expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days
+          status: 'pending',
         }]);
 
       if (inviteError) throw inviteError;

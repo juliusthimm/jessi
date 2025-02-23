@@ -37,6 +37,7 @@ export type Database = {
           email: string
           expires_at: string
           id: string
+          status: Database["public"]["Enums"]["invite_status"]
           token: string
         }
         Insert: {
@@ -45,6 +46,7 @@ export type Database = {
           email: string
           expires_at: string
           id?: string
+          status?: Database["public"]["Enums"]["invite_status"]
           token: string
         }
         Update: {
@@ -53,6 +55,7 @@ export type Database = {
           email?: string
           expires_at?: string
           id?: string
+          status?: Database["public"]["Enums"]["invite_status"]
           token?: string
         }
         Relationships: [
@@ -211,6 +214,7 @@ export type Database = {
     Enums: {
       company_role: "employee" | "hr" | "admin"
       conversation_status: "processing" | "done" | "error"
+      invite_status: "pending" | "accepted" | "expired"
       user_mode: "personal" | "company"
     }
     CompositeTypes: {
