@@ -119,7 +119,7 @@ const Home = () => {
           {!showAssessment && <div className="w-full">
               <Card className="p-6 bg-white/5 backdrop-blur-lg border-white/10">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold text-pulse-100">My History</h2>
+                  <h2 className="text-xl font-semibold text-pulse-100">My Reports</h2>
                 </div>
                 <AnalysisHistory />
               </Card>
