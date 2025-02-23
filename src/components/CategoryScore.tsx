@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Progress } from "@/components/ui/progress";
 import { ChevronDown } from "lucide-react";
@@ -16,11 +17,11 @@ export const CategoryScore = ({
 }: CategoryScoreProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   return <div className="p-6 rounded-xl bg-white/5 backdrop-blur-lg border border-white/10">
-      <h3 className="text-lg font-semibold mb-2 text-slate-50">{title}</h3>
-      <div className="space-y-4">
+      <h3 className="text-lg font-semibold mb-4 text-slate-50">{title}</h3>
+      <div className="space-y-6">
         {score !== null ? <Progress value={score} className="h-2" /> : <div className="h-2 bg-pulse-700/30 rounded-full" />}
         <div className="flex justify-between items-start">
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-2">
             {score !== null ? <p className="text-2xl font-bold text-pulse-100">{score}</p> : <p className="text-lg font-medium text-pulse-300">Not Calculated</p>}
             {description && <p className="text-sm text-pulse-300 max-w-[90%]">{description}</p>}
           </div>
