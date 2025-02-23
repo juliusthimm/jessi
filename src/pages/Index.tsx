@@ -35,8 +35,8 @@ const Index = () => {
             Employee pulse surveys suck.
           </h1>
           <div className="space-y-4 text-xl md:text-2xl max-w-2xl mx-auto">
-            <p className="text-pulse-300">Self-rating your wellbeing from 0 to 10 is like reading one sentence of a book:</p>
-            <p className="text-pulse-300">...is like reading one sentence of a book.</p>
+            <p className="text-pulse-300 font-normal">Self-rating your wellbeing from 0 to 10 is like reading one sentence of a book:</p>
+            
             <p className="font-semibold text-pulse-100">You miss the story & emotions.</p>
           </div>
           <div className="pt-8">
