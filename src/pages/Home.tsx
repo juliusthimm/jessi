@@ -27,17 +27,18 @@ const Home = () => {
 
         const { data: member } = await supabase
           .from('company_members')
-          .select('role')
+          .select('role, company_id')
           .eq('user_id', user.id)
           .single();
         
         setUserRole(member?.role || null);
 
-        // If admin, fetch total chats
-        if (member?.role === 'admin') {
+        // If admin, fetch total chats for their company
+        if (member?.role === 'admin' && member?.company_id) {
           const { count } = await supabase
             .from('conversation_analyses')
-            .select('*', { count: 'exact', head: true });
+            .select('*', { count: 'exact', head: true })
+            .eq('company_id', member.company_id);
           setTotalChats(count || 0);
         }
       } catch (error) {
@@ -136,7 +137,7 @@ const Home = () => {
                 </div>
                 <div>
                   <h2 className="text-xl font-semibold text-pulse-100">
-                    Total Assessments
+                    Company Assessments
                   </h2>
                   <p className="text-3xl font-bold text-pulse-300">{totalChats}</p>
                 </div>
