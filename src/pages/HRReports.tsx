@@ -51,7 +51,7 @@ const HRReports = () => {
             user_id,
             analysis,
             created_at,
-            profiles (
+            profiles:user_id (
               username
             )
           `)
